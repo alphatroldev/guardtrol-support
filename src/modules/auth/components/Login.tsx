@@ -52,9 +52,10 @@ export function Login() {
         });
 
         dispatch(setUser(user.data));
-        console.log(user.data);
+        console.log(user?.data);
       } catch (error: any) {
-        setStatus(error.response.data.error);
+        console.log(error);
+        setStatus(error?.response?.data?.error);
       } finally {
         setLoading(false);
       }
