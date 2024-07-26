@@ -119,6 +119,7 @@ const CreateSubscription: FC<Props> = ({ show, handleClose }) => {
   };
   return (
     <ReusableForm
+      title="Create Subscription"
       attributes={attributes}
       initialValues={initialValues}
       onSubmit={handleSubmit}

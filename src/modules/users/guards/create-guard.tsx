@@ -91,6 +91,7 @@ const CreateBeatForm = ({ show, handleClose }: Props) => {
 
   return (
     <ReusableForm
+      title="Create Guard"
       show={show}
       handleClose={handleClose}
       attributes={guardAttributes}

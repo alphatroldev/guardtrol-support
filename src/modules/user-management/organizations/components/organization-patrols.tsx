@@ -42,7 +42,7 @@ const OrganizationPatrols: FC = () => {
         total={data?.total}
         pagination={{
           currentPage: page,
-          totalPages: data?.totalPages || 0,
+          totalPages: data?.total ? Math.ceil(data?.total / limit) : 0,
           onPageChange: setPage,
         }}
         filters={{

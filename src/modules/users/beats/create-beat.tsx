@@ -88,6 +88,7 @@ const CreateBeatForm = ({ show, handleClose }: Props) => {
   return (
     <ReusableForm
       show={show}
+      title="Create Beat"
       handleClose={handleClose}
       attributes={beatAttributes}
       initialValues={beatInitialValues}
