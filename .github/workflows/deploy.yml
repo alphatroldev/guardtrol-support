@@ -18,7 +18,7 @@ jobs:
       # Install dependencies and build the project
       - name: 🔨 Build the project
         run: |
-          npm install
+          npm install --legacy-peer-deps
           CI=false npm run build
 
       # Sync files via FTP
