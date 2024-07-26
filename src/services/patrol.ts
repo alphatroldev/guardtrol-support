@@ -1,10 +1,11 @@
 import baseApi from "./baseApi";
 import { IPatrol } from "../types/patrol";
+import { PaginatedResponse } from "../types/Statics";
 
 export const patrolApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getPatrols: builder.query<IPatrol[], void>({
-      query: () => "patrols",
+    getPatrols: builder.query<PaginatedResponse<IPatrol[]>, any>({
+      query: (params) => ({ url: "patrols", params }),
     }),
     getPatrolById: builder.query<IPatrol, string>({
       query: (id) => `patrols/${id}`,

@@ -15,7 +15,6 @@ import { KTIcon } from "../../_metronic/helpers";
 interface Attribute {
   name: string;
   label: string;
-
   type: string;
   options?: { value: string; label: string }[];
   placeholder?: string;
@@ -24,18 +23,20 @@ interface Attribute {
 
 interface ReusableFormProps {
   attributes: Attribute[];
-  title: string;
   initialValues: { [key: string]: any };
   onSubmit: (values: any) => void;
-  handleCancel: (values: any) => void;
+  show: boolean;
+  title: string;
+  handleClose: () => void;
 }
 
-const ReusableForm: React.FC<ReusableFormProps> = ({
+const ReusableFormModal: React.FC<ReusableFormProps> = ({
   attributes,
   initialValues,
   onSubmit,
+  show,
   title,
-  handleCancel,
+  handleClose,
 }) => {
   const validationSchema = Yup.object(
     attributes.reduce((acc, attr) => {
@@ -171,42 +172,60 @@ const ReusableForm: React.FC<ReusableFormProps> = ({
   };
 
   return (
-    <div className="card">
-      <div className="card-header">
-        <h5 className="card-title">{title}</h5>
-      </div>
-      <div className="card-body">
-        <form onSubmit={formik.handleSubmit}>
-          <div className="row " style={{ rowGap: "10px" }}>
-            {attributes.map((attribute) => (
-              <div className="col-6">{renderField(attribute)}</div>
-            ))}
+    <Modal
+      className="modal fade"
+      data-backdrop="static"
+      tabIndex={-1}
+      role="dialog"
+      show={show}
+      dialogClassName="modal-lg"
+      aria-hidden="true"
+      onHide={handleClose}
+    >
+      <div className="modal-content">
+        <div className="modal-header">
+          <h5 className="modal-title">{title}</h5>
+
+          <div
+            className="btn btn-icon btn-sm btn-active-light-primary ms-2"
+            onClick={handleClose}
+          >
+            <KTIcon iconName="cross" className="fs-2x" />
           </div>
-        </form>
+        </div>
+        <div className="modal-body">
+          <form onSubmit={formik.handleSubmit}>
+            <div className="row " style={{ rowGap: "10px" }}>
+              {attributes.map((attribute) => (
+                <div className="col-6">{renderField(attribute)}</div>
+              ))}
+            </div>
+          </form>
+        </div>
+        <div className="modal-footer">
+          <button
+            type="button"
+            className="btn btn-light-primary"
+            onClick={handleClose}
+          >
+            Cancel
+          </button>
+          <button
+            disabled={formik.isSubmitting}
+            id="submit"
+            type="button"
+            className="btn btn-primary"
+          >
+            {formik.isSubmitting ? (
+              <Spinner animation="border" size="sm" className="" />
+            ) : (
+              "Submit"
+            )}
+          </button>
+        </div>
       </div>
-      <div className="card-footer d-flex gap-10">
-        <button
-          type="button"
-          className="btn btn-light-primary"
-          onClick={handleCancel}
-        >
-          Cancel
-        </button>
-        <button
-          disabled={formik.isSubmitting}
-          id="submit"
-          type="button"
-          className="btn btn-primary"
-        >
-          {formik.isSubmitting ? (
-            <Spinner animation="border" size="sm" className="" />
-          ) : (
-            "Submit"
-          )}
-        </button>
-      </div>
-    </div>
+    </Modal>
   );
 };
 
-export default ReusableForm;
+export default ReusableFormModal;

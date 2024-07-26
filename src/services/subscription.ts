@@ -1,10 +1,11 @@
 import baseApi from "./baseApi";
 import { ISubscription } from "../types/subscription";
+import { PaginatedResponse } from "../types/Statics";
 
 export const subscriptionApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getSubscriptions: builder.query({
-      query: ({ page, limit }) => `subscription?page=${page}&limit=${limit}`,
+    getSubscriptions: builder.query<PaginatedResponse<ISubscription[]>, any>({
+      query: (params) => ({ url: `subscription`, params }),
     }),
     getSubscriptionById: builder.query<ISubscription, string>({
       query: (id) => `subscription/${id}`,

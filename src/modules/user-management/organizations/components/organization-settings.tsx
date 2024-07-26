@@ -1,20 +1,13 @@
 import { FC } from "react";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { Modal } from "react-bootstrap";
-import { KTIcon } from "../../../_metronic/helpers";
-import Input from "../../../components/form/inputs";
-import DatePicker from "../../../components/form/DatePicker";
-import CustomSelect from "../../../components/form/Select";
-import Checkbox from "../../../components/form/Checkbox";
-import Radio from "../../../components/form/Radio";
-import Switch from "../../../components/form/Switch";
-import ReusableForm from "../../../components/form/ReusableFormModal";
+import { KTIcon, toAbsoluteUrl } from "../../../../_metronic/helpers";
+import { Link, useLocation, useParams } from "react-router-dom";
+import { Dropdown1 } from "../../../../_metronic/partials";
+import { CreateOrganization } from "../create-organization";
+import { useGetOrganizationByIdQuery } from "../../../../services/organization";
+import ReusableFormModal from "../../../../components/form/ReusableFormModal";
 import * as Yup from "yup";
+import ReusableForm from "../../../../components/form/ReusableForm";
 
-type Props = {
-  show: boolean;
-  handleClose: () => void;
-};
 const attributes = [
   {
     name: "name",
@@ -106,26 +99,35 @@ const initialValues = {
   image: null,
   onboardingcomplete: false,
 };
+const OrganizationSettings: FC = () => {
+  const { organizationId } = useParams();
 
-const CreateSubscription: FC<Props> = ({ show, handleClose }) => {
-  useEffect(() => {
-    initMap();
-  }, []);
-
-  const initMap = () => {};
+  const { data: organization, isLoading } = useGetOrganizationByIdQuery(
+    organizationId || "",
+    {
+      skip: organizationId ? false : true,
+    }
+  );
 
   const handleSubmit = (values: any) => {
     console.log("Form values:", values);
   };
+  const handleCancel = (values: any) => {
+    console.log("Form values:", values);
+  };
   return (
-    <ReusableForm
-      attributes={attributes}
-      initialValues={initialValues}
-      onSubmit={handleSubmit}
-      show={show}
-      handleClose={handleClose}
-    />
+    <>
+      {!isLoading && organization && (
+        <ReusableForm
+          attributes={attributes}
+          initialValues={initialValues}
+          onSubmit={handleSubmit}
+          title="Edit Organization"
+          handleCancel={handleCancel}
+        />
+      )}
+    </>
   );
 };
 
-export { CreateSubscription };
+export { OrganizationSettings };

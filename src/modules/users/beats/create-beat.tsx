@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import * as Yup from "yup";
-import ReusableForm from "../../../components/form/ReusableForm";
+import ReusableForm from "../../../components/form/ReusableFormModal";
 import { Modal } from "react-bootstrap";
 import { KTIcon } from "../../../_metronic/helpers";
 

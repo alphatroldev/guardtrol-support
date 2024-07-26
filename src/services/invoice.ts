@@ -1,10 +1,11 @@
 import baseApi from "./baseApi";
 import { IInvoice } from "../types/invoice";
+import { PaginatedResponse } from "../types/Statics";
 
 export const invoiceApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getInvoices: builder.query<IInvoice[], void>({
-      query: () => "invoices",
+    getInvoices: builder.query<PaginatedResponse<IInvoice[]>, any>({
+      query: (params) => ({ url: "invoices", params }),
     }),
     getInvoiceById: builder.query<IInvoice, string>({
       query: (id) => `invoices/${id}`,

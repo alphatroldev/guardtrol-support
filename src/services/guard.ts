@@ -1,10 +1,11 @@
 import baseApi from "./baseApi";
 import { IGuard } from "../types/guard";
+import { PaginatedResponse } from "../types/Statics";
 
 export const guardApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getGuards: builder.query({
-      query: ({ page, limit }) => `guards?page=${page}&limit=${limit}`,
+    getGuards: builder.query<PaginatedResponse<IGuard[]>, any>({
+      query: (params) => ({ url: `guards`, params }),
     }),
     getGuardById: builder.query<IGuard, string>({
       query: (id) => `guards/${id}`,

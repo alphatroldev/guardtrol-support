@@ -12,6 +12,8 @@ interface ReusableTableProps {
   error: any | null;
   buttonText?: string;
   showButton?: boolean;
+  hasViewBtn?: boolean;
+  hasEditBtn?: boolean;
   total: any | null;
   title: any | null;
   pagination: {
@@ -24,6 +26,8 @@ interface ReusableTableProps {
     onLimitChange: (limit: number) => void;
   };
   onClick?: () => void;
+  onClickView?: (id: any) => void;
+  onClickEdit?: () => void;
   refetch: () => void;
 }
 
@@ -31,12 +35,16 @@ const ReusableTable: FC<ReusableTableProps> = ({
   data,
   columns,
   buttonText,
+  hasViewBtn,
   title,
   isLoading,
   isFetching,
   error,
   total,
+  hasEditBtn,
   pagination,
+  onClickView,
+  onClickEdit,
   filters,
   refetch,
   onClick,
@@ -81,7 +89,7 @@ const ReusableTable: FC<ReusableTableProps> = ({
             className="btn btn-sm d-flex gap-2 justify-content-center align-items-center fw-bold btn-primary"
           >
             {isFetching ? (
-              <Spinner animation="border" size="sm" className="" />
+              <Spinner animation="border" className="" />
             ) : (
               "Refetch"
             )}
@@ -93,11 +101,6 @@ const ReusableTable: FC<ReusableTableProps> = ({
       </div>
       <div className="card-body py-3">
         <div className="table-responsive">
-          {isLoading && (
-            <div className=" justify-content-center align-items-center d-flex py-10">
-              <Spinner animation="border" size="sm" className="" />
-            </div>
-          )}
           {error && <p className="text-danger">{error}</p>}
           {!isLoading && !error && (
             <>
@@ -109,7 +112,9 @@ const ReusableTable: FC<ReusableTableProps> = ({
                       return (
                         <th
                           className={`ps-4  ${i === 0 && "rounded-start"} ${
-                            i === columns?.length - 1 && "rounded-end"
+                            i === columns?.length - 1 &&
+                            !hasViewBtn &&
+                            "rounded-end"
                           }`}
                           key={col.accessor}
                         >
@@ -117,23 +122,69 @@ const ReusableTable: FC<ReusableTableProps> = ({
                         </th>
                       );
                     })}
+                    {hasViewBtn && (
+                      <th className={`ps-4 rounded-end`}>Actions</th>
+                    )}
                   </tr>
                 </thead>
                 <tbody>
-                  {data.map((row, rowIndex) => (
-                    <tr key={rowIndex}>
-                      {columns.map((col, i) => (
-                        <td
-                          className={`text-gray-900 fw-bold text-hover-primary text-capitalize fs-6 ${
-                            i === 0 && "ml-10"
-                          }`}
-                          key={col.accessor}
-                        >
-                          {row[col.accessor]}
-                        </td>
-                      ))}
+                  {data?.length === 0 && (
+                    <tr>
+                      <td colSpan={columns.length + 1}>
+                        <div className=" justify-content-center align-items-center d-flex py-10">
+                          <span className="text-muted">No {title}</span>
+                        </div>
+                      </td>
                     </tr>
-                  ))}
+                  )}
+                  {(isLoading || isFetching) && (
+                    <tr>
+                      <td colSpan={columns.length + 1}>
+                        <div className=" justify-content-center align-items-center d-flex py-10">
+                          <Spinner animation="border" className="" />
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                  {!isFetching &&
+                    data.map((row, rowIndex) => (
+                      <tr key={rowIndex}>
+                        {columns.map((col, i) => (
+                          <td
+                            className={`text-gray-900 fw-bold text-hover-primary text-capitalize fs-6 ${
+                              i === 0 && "ml-10"
+                            }`}
+                            key={col.accessor}
+                          >
+                            {row[col.accessor]}
+                          </td>
+                        ))}
+
+                        {(hasViewBtn || hasEditBtn) && (
+                          <td className="text-center">
+                            {hasViewBtn && (
+                              <button
+                                onClick={() =>
+                                  onClickView && onClickView(row["_id"])
+                                }
+                                className="btn btn-bg-light btn-color-muted btn-active-color-primary btn-sm px-4 me-2"
+                              >
+                                View
+                              </button>
+                            )}
+                            {hasEditBtn && (
+                              <a
+                                onClick={() => onClickEdit && onClickEdit()}
+                                href="#"
+                                className="btn btn-bg-light btn-color-muted btn-active-color-primary btn-sm px-4"
+                              >
+                                Edit
+                              </a>
+                            )}
+                          </td>
+                        )}
+                      </tr>
+                    ))}
                 </tbody>
               </table>
               <div className="d-flex justify-content-between">

@@ -31,8 +31,8 @@ const SidebarMenuMain = () => {
         icon="people"
       >
         <SidebarMenuItem
-          to="/user-management/profiles"
-          title={intl.formatMessage({ id: "MENU.USER_PROFILES" })}
+          to="/user-management/organizations"
+          title={intl.formatMessage({ id: "MENU.ORGANIZATIONS" })}
           hasBullet={true}
         />
         <SidebarMenuItem

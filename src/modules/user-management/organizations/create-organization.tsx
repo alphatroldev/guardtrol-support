@@ -10,11 +10,8 @@ import Radio from "../../../components/form/Radio";
 import Switch from "../../../components/form/Switch";
 import ReusableForm from "../../../components/form/ReusableForm";
 import * as Yup from "yup";
+import ReusableFormModal from "../../../components/form/ReusableFormModal";
 
-type Props = {
-  show: boolean;
-  handleClose: () => void;
-};
 const attributes = [
   {
     name: "name",
@@ -106,8 +103,12 @@ const initialValues = {
   image: null,
   onboardingcomplete: false,
 };
+type Props = {
+  show: boolean;
+  handleClose: () => void;
+};
 
-const CreateOrganization: FC<Props> = ({ show, handleClose }) => {
+const CreateOrganization = ({ show, handleClose }: Props) => {
   useEffect(() => {
     initMap();
   }, []);
@@ -117,12 +118,16 @@ const CreateOrganization: FC<Props> = ({ show, handleClose }) => {
   const handleSubmit = (values: any) => {
     console.log("Form values:", values);
   };
+  const handleCancel = (values: any) => {
+    console.log("Form values:", values);
+  };
   return (
-    <ReusableForm
+    <ReusableFormModal
       attributes={attributes}
       initialValues={initialValues}
       onSubmit={handleSubmit}
       show={show}
+      title="Create Organization"
       handleClose={handleClose}
     />
   );

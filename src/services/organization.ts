@@ -1,10 +1,14 @@
 import baseApi from "./baseApi";
 import { IOrganization } from "../types/organization";
+import { PaginatedResponse } from "../types/Statics";
 
 export const organizationApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getOrganizations: builder.query({
-      query: ({ page, limit }) => `organizations?page=${page}&limit=${limit}`,
+    getOrganizations: builder.query<PaginatedResponse<IOrganization[]>, any>({
+      query: (params) => ({
+        url: `organizations`,
+        params,
+      }),
     }),
     getOrganizationById: builder.query<IOrganization, string>({
       query: (id) => `organizations/${id}`,

@@ -1,10 +1,11 @@
 import baseApi from "./baseApi";
 import { IModification } from "../types/modification";
+import { PaginatedResponse } from "../types/Statics";
 
 export const modificationApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getModifications: builder.query<IModification[], void>({
-      query: () => "modifications",
+    getModifications: builder.query<PaginatedResponse<IModification[]>, any>({
+      query: (params) => ({ url: "modifications", params }),
     }),
     getModificationById: builder.query<IModification, string>({
       query: (id) => `modifications/${id}`,

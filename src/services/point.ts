@@ -1,10 +1,11 @@
 import baseApi from "./baseApi";
 import { IPoint } from "../types/point";
+import { PaginatedResponse } from "../types/Statics";
 
 export const pointApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getPoints: builder.query<IPoint[], void>({
-      query: () => "points",
+    getPoints: builder.query<PaginatedResponse<IPoint[]>, any>({
+      query: (params) => ({ url: "points", params }),
     }),
     getPointById: builder.query<IPoint, string>({
       query: (id) => `points/${id}`,

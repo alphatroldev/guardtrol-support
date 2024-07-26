@@ -6,6 +6,7 @@ import UsersRouter from "../modules/users/users-router";
 import { WithChildren } from "../_metronic/helpers";
 import { getCSSVariableValue } from "../_metronic/assets/ts/_utils";
 import TopBarProgress from "react-topbar-progress-indicator";
+import UsersManagementRouter from "../modules/user-management/user-management-router";
 
 const PrivateRoutes = () => {
   return (
@@ -16,6 +17,7 @@ const PrivateRoutes = () => {
         {/* Pages */}
         <Route path="dashboard" element={<AdminDashboardWrapper />} />
         <Route path="users/*" element={<UsersRouter />} />
+        <Route path="user-management/*" element={<UsersManagementRouter />} />
 
         {/* Page Not Found */}
         <Route path="*" element={<Navigate to="/error/404" />} />

@@ -8,13 +8,10 @@ import CustomSelect from "../../../components/form/Select";
 import Checkbox from "../../../components/form/Checkbox";
 import Radio from "../../../components/form/Radio";
 import Switch from "../../../components/form/Switch";
-import ReusableForm from "../../../components/form/ReusableFormModal";
+import ReusableForm from "../../../components/form/ReusableForm";
 import * as Yup from "yup";
+import ReusableFormModal from "../../../components/form/ReusableFormModal";
 
-type Props = {
-  show: boolean;
-  handleClose: () => void;
-};
 const attributes = [
   {
     name: "name",
@@ -106,8 +103,12 @@ const initialValues = {
   image: null,
   onboardingcomplete: false,
 };
+type Props = {
+  show: boolean;
+  handleClose: () => void;
+};
 
-const CreateSubscription: FC<Props> = ({ show, handleClose }) => {
+const EditOrganization = ({ show, handleClose }: Props) => {
   useEffect(() => {
     initMap();
   }, []);
@@ -117,15 +118,19 @@ const CreateSubscription: FC<Props> = ({ show, handleClose }) => {
   const handleSubmit = (values: any) => {
     console.log("Form values:", values);
   };
+  const handleCancel = (values: any) => {
+    console.log("Form values:", values);
+  };
   return (
-    <ReusableForm
+    <ReusableFormModal
       attributes={attributes}
       initialValues={initialValues}
       onSubmit={handleSubmit}
       show={show}
+      title="Edit Organization"
       handleClose={handleClose}
     />
   );
 };
 
-export { CreateSubscription };
+export { EditOrganization };

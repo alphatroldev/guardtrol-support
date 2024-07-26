@@ -1,10 +1,14 @@
 import baseApi from "./baseApi";
 import { IBeat } from "../types/beat";
+import { PaginatedResponse } from "../types/Statics";
 
 export const beatApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getBeats: builder.query({
-      query: ({ page, limit }) => `beats?page=${page}&limit=${limit}`,
+    getBeats: builder.query<PaginatedResponse<IBeat[]>, any>({
+      query: (params) => ({
+        url: `beats`,
+        params,
+      }),
     }),
     getBeatById: builder.query<IBeat, string>({
       query: (id) => `beats/${id}`,

@@ -44,7 +44,7 @@ const AllBeats: React.FC = () => {
           total={data?.total}
           pagination={{
             currentPage: page,
-            totalPages: Math.ceil(data?.total / limit),
+            totalPages: data?.total ? Math.ceil(data?.total / limit) : 0,
             onPageChange: setPage,
           }}
           filters={{
