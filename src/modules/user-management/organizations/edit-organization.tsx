@@ -126,6 +126,7 @@ const EditOrganization = ({ show, handleClose }: Props) => {
 
   return (
     <ReusableFormModal
+      isLoading={false}
       attributes={attributes}
       initialValues={initialValues}
       onSubmit={handleSubmit}

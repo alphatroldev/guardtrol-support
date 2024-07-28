@@ -127,6 +127,7 @@ const CreateOrganization = ({ show, handleClose }: Props) => {
       initialValues={initialValues}
       onSubmit={handleSubmit}
       show={show}
+      isLoading={false}
       title="Create Organization"
       handleClose={handleClose}
     />

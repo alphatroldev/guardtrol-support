@@ -27,7 +27,7 @@ interface ReusableFormProps {
   initialValues: { [key: string]: any };
   onSubmit: (values: any) => void;
   show: boolean;
-  isLoading: boolean;
+  isLoading?: boolean;
   title: string;
   handleClose: () => void;
 }
