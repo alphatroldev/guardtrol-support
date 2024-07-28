@@ -11,7 +11,6 @@ export const rtkQueryErrorLogger =
     if (isRejectedWithValue(action)) {
       if (action?.payload?.data?.error) {
         toast.error(action?.payload?.data?.error, {});
-        return;
       }
 
       if (action?.payload?.data?.message) {
@@ -26,13 +25,9 @@ export const rtkQueryErrorLogger =
           baseApi.util.resetApiState();
         }
         toast.error(action?.payload?.data?.message, {});
-        return;
       }
       if (action?.payload?.data?.errors) {
         toast.error(action?.payload?.data?.errors[0]?.message, {});
-        return;
-      } else {
-        toast.error(action?.payload?.data?.error, {});
       }
     }
     return next(action);

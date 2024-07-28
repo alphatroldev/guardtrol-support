@@ -21,13 +21,16 @@ import { OrganizationPatrols } from "./components/organization-patrols";
 import { OrganizationPoints } from "./components/organization-points";
 import { OrganizationOverview } from "./components/organization-overview";
 import { useGetOrganizationByIdQuery } from "../../../services/organization";
+import { Spinner } from "react-bootstrap";
+import { ResetOrganizationPassword } from "./components/organization-password-reset";
+import { OrganizationSubscriptions } from "./components/organization-subcription";
 
 type Props = {};
 
 const OrganizationPage = () => {
   const params = useParams();
 
-  const { data: organization } = useGetOrganizationByIdQuery(
+  const { data: organization, isLoading } = useGetOrganizationByIdQuery(
     params.organizationId || "",
     {
       skip: params.organizationId ? false : true,
@@ -58,8 +61,16 @@ const OrganizationPage = () => {
             >
               View Organization
             </PageTitle>
-            <OrganizationHeader />
-            <Outlet />
+            {!isLoading ? (
+              <>
+                <OrganizationHeader />
+                <Outlet />
+              </>
+            ) : (
+              <div className="justify-content-center align-items-center d-flex py-20">
+                <Spinner animation="border" className="" />
+              </div>
+            )}
           </>
         }
       >
@@ -119,6 +130,17 @@ const OrganizationPage = () => {
           }
         />
         <Route
+          path={`subscriptions`}
+          element={
+            <>
+              <PageTitle breadcrumbs={usersOrganizationManagementBreadCrumbs}>
+                Subscriptions
+              </PageTitle>
+              <OrganizationSubscriptions />
+            </>
+          }
+        />
+        <Route
           path={`settings`}
           element={
             <>
@@ -126,6 +148,7 @@ const OrganizationPage = () => {
                 Settings
               </PageTitle>
               <OrganizationSettings />
+              <ResetOrganizationPassword />
             </>
           }
         />

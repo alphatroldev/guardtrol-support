@@ -9,9 +9,20 @@ export const organizationApi = baseApi.injectEndpoints({
         url: `organizations`,
         params,
       }),
+      providesTags: (result, error, arg) =>
+        result
+          ? [
+              ...result?.data?.map(({ _id }) => ({
+                type: "Organization" as const,
+                id: _id,
+              })),
+              { type: "Organization", id: "LIST" },
+            ]
+          : [{ type: "Organization", id: "LIST" }],
     }),
     getOrganizationById: builder.query<IOrganization, string>({
       query: (id) => `organizations/${id}`,
+      providesTags: (result, error, id) => [{ type: "Organization", id }],
     }),
     createOrganization: builder.mutation<IOrganization, Partial<IOrganization>>(
       {
@@ -20,23 +31,42 @@ export const organizationApi = baseApi.injectEndpoints({
           method: "POST",
           body: organization,
         }),
+        invalidatesTags: [{ type: "Organization", id: "LIST" }],
       }
     ),
+
     updateOrganization: builder.mutation<
-      IOrganization,
+      { success: boolean },
       { id: string; data: Partial<IOrganization> }
     >({
       query: ({ id, data }) => ({
         url: `organizations/${id}`,
-        method: "PUT",
+        method: "PATCH",
         body: data,
       }),
+      invalidatesTags: (result, error, { id }) => [
+        { type: "Organization", id },
+      ],
+    }),
+    resetOrganizationPassword: builder.mutation<
+      { success: boolean },
+      { id: string; data: Partial<IOrganization> }
+    >({
+      query: ({ id, data }) => ({
+        url: `organizations/reset-password/${id}`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: (result, error, { id }) => [
+        { type: "Organization", id },
+      ],
     }),
     deleteOrganization: builder.mutation<{ success: boolean }, string>({
       query: (id) => ({
         url: `organizations/${id}`,
         method: "DELETE",
       }),
+      invalidatesTags: (result, error, id) => [{ type: "Organization", id }],
     }),
   }),
 });
@@ -47,4 +77,5 @@ export const {
   useCreateOrganizationMutation,
   useUpdateOrganizationMutation,
   useDeleteOrganizationMutation,
+  useResetOrganizationPasswordMutation,
 } = organizationApi;

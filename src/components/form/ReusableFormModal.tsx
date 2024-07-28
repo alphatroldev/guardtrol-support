@@ -11,6 +11,7 @@ import Switch from "./Switch";
 import Input from "./inputs";
 import { Modal, Spinner } from "react-bootstrap";
 import { KTIcon } from "../../_metronic/helpers";
+import { error } from "console";
 
 interface Attribute {
   name: string;
@@ -26,6 +27,7 @@ interface ReusableFormProps {
   initialValues: { [key: string]: any };
   onSubmit: (values: any) => void;
   show: boolean;
+  isLoading: boolean;
   title: string;
   handleClose: () => void;
 }
@@ -36,6 +38,7 @@ const ReusableFormModal: React.FC<ReusableFormProps> = ({
   onSubmit,
   show,
   title,
+  isLoading,
   handleClose,
 }) => {
   const validationSchema = Yup.object(
@@ -50,7 +53,23 @@ const ReusableFormModal: React.FC<ReusableFormProps> = ({
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit,
+    onSubmit: async (values) => {
+      // const formData = new FormData();
+
+      // for (const key in values) {
+      //   if (values[key] instanceof FileList) {
+      //     for (let i = 0; i < values[key].length; i++) {
+      //       formData.append(key, values[key][i]);
+      //     }
+      //   } else {
+      //     formData.append(key, values[key]);
+      //   }
+      // }
+
+      await onSubmit(values);
+      formik.resetForm();
+      handleClose();
+    },
   });
 
   const renderField = (attribute: Attribute) => {
@@ -58,6 +77,28 @@ const ReusableFormModal: React.FC<ReusableFormProps> = ({
       case "text":
       case "email":
       case "password":
+        return (
+          <>
+            <Input
+              key={attribute.name}
+              id={attribute.name}
+              label={attribute.label}
+              type={attribute.type}
+              placeholder={attribute.placeholder || ""}
+              value={formik.values[attribute.name]}
+              onChange={formik.handleChange}
+              required={
+                !!attribute.validation?.tests.find(
+                  (test: any) => test.OPTIONS.name === "required"
+                )
+              }
+            />
+            {formik.errors[attribute.name] && (
+              <ErrorMessage message={formik.errors[attribute.name]} />
+            )}
+          </>
+        );
+      case "number":
         return (
           <>
             <Input
@@ -170,7 +211,12 @@ const ReusableFormModal: React.FC<ReusableFormProps> = ({
         return null;
     }
   };
+  const handleReset = () => {
+    formik.resetForm();
+    handleClose();
+  };
 
+  console.log(formik.errors);
   return (
     <Modal
       className="modal fade"
@@ -200,28 +246,27 @@ const ReusableFormModal: React.FC<ReusableFormProps> = ({
                 <div className="col-6">{renderField(attribute)}</div>
               ))}
             </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-light-primary"
+                onClick={handleReset}
+              >
+                Cancel
+              </button>
+              <button
+                disabled={isLoading}
+                type="submit"
+                className="btn btn-primary"
+              >
+                {isLoading ? (
+                  <Spinner animation="border" size="sm" className="" />
+                ) : (
+                  "Submit"
+                )}
+              </button>
+            </div>
           </form>
-        </div>
-        <div className="modal-footer">
-          <button
-            type="button"
-            className="btn btn-light-primary"
-            onClick={handleClose}
-          >
-            Cancel
-          </button>
-          <button
-            disabled={formik.isSubmitting}
-            id="submit"
-            type="button"
-            className="btn btn-primary"
-          >
-            {formik.isSubmitting ? (
-              <Spinner animation="border" size="sm" className="" />
-            ) : (
-              "Submit"
-            )}
-          </button>
         </div>
       </div>
     </Modal>

@@ -15,7 +15,6 @@ import { KTIcon } from "../../_metronic/helpers";
 interface Attribute {
   name: string;
   label: string;
-
   type: string;
   options?: { value: string; label: string }[];
   placeholder?: string;
@@ -25,6 +24,7 @@ interface Attribute {
 interface ReusableFormProps {
   attributes: Attribute[];
   title: string;
+  isLoading: boolean;
   initialValues: { [key: string]: any };
   onSubmit: (values: any) => void;
   handleCancel: (values: any) => void;
@@ -35,6 +35,7 @@ const ReusableForm: React.FC<ReusableFormProps> = ({
   initialValues,
   onSubmit,
   title,
+  isLoading,
   handleCancel,
 }) => {
   const validationSchema = Yup.object(
@@ -49,7 +50,22 @@ const ReusableForm: React.FC<ReusableFormProps> = ({
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit,
+
+    onSubmit: async (values) => {
+      const formData = new FormData();
+
+      for (const key in values) {
+        if (values[key] instanceof FileList) {
+          for (let i = 0; i < values[key].length; i++) {
+            formData.append(key, values[key][i]);
+          }
+        } else {
+          formData.append(key, values[key]);
+        }
+      }
+
+      await onSubmit(formData);
+    },
   });
 
   const renderField = (attribute: Attribute) => {
@@ -80,26 +96,36 @@ const ReusableForm: React.FC<ReusableFormProps> = ({
         );
       case "date":
         return (
-          <DatePicker
-            key={attribute.name}
-            label={attribute.label}
-            value={formik.values[attribute.name]}
-            onChange={(date: Date) =>
-              formik.setFieldValue(attribute.name, date)
-            }
-          />
+          <>
+            <DatePicker
+              key={attribute.name}
+              label={attribute.label}
+              value={formik.values[attribute.name]}
+              onChange={(date: Date) =>
+                formik.setFieldValue(attribute.name, date)
+              }
+            />
+            {formik.errors[attribute.name] && (
+              <ErrorMessage message={formik.errors[attribute.name]} />
+            )}
+          </>
         );
       case "select":
         return (
-          <CustomSelect
-            key={attribute.name}
-            label={attribute.label}
-            options={attribute.options || []}
-            value={formik.values[attribute.name]}
-            onChange={(option: any) =>
-              formik.setFieldValue(attribute.name, option)
-            }
-          />
+          <>
+            <CustomSelect
+              key={attribute.name}
+              label={attribute.label}
+              options={attribute.options || []}
+              value={formik.values[attribute.name]}
+              onChange={(option: any) =>
+                formik.setFieldValue(attribute.name, option)
+              }
+            />
+            {formik.errors[attribute.name] && (
+              <ErrorMessage message={formik.errors[attribute.name]} />
+            )}
+          </>
         );
       case "checkbox":
         return (
@@ -112,6 +138,9 @@ const ReusableForm: React.FC<ReusableFormProps> = ({
               checked={formik.values[attribute.name]}
               onChange={formik.handleChange}
             />
+            {formik.errors[attribute.name] && (
+              <ErrorMessage message={formik.errors[attribute.name]} />
+            )}
           </>
         );
       case "radio":
@@ -119,9 +148,8 @@ const ReusableForm: React.FC<ReusableFormProps> = ({
           <div key={attribute.name} className="row fw-row">
             <label className={`form-label `}>{attribute.label}</label>
             {attribute.options?.map((option) => (
-              <div className="col-4">
+              <div className="col-4" key={option.value}>
                 <Radio
-                  key={option.value}
                   id={`${attribute.name}-${option.value}`}
                   label={option.label}
                   checked={formik.values[attribute.name] === option.value}
@@ -131,6 +159,9 @@ const ReusableForm: React.FC<ReusableFormProps> = ({
                 />
               </div>
             ))}
+            {formik.errors[attribute.name] && (
+              <ErrorMessage message={formik.errors[attribute.name]} />
+            )}
           </div>
         );
       case "file":
@@ -148,6 +179,9 @@ const ReusableForm: React.FC<ReusableFormProps> = ({
                 formik.setFieldValue(attribute.name, file);
               }}
             />
+            {formik.errors[attribute.name] && (
+              <ErrorMessage message={formik.errors[attribute.name]} />
+            )}
           </div>
         );
       case "switch":
@@ -163,6 +197,9 @@ const ReusableForm: React.FC<ReusableFormProps> = ({
               checked={formik.values[attribute.name]}
               onChange={formik.handleChange}
             />
+            {formik.errors[attribute.name] && (
+              <ErrorMessage message={formik.errors[attribute.name]} />
+            )}
           </>
         );
       default:
@@ -170,40 +207,41 @@ const ReusableForm: React.FC<ReusableFormProps> = ({
     }
   };
 
+  const handleReset = () => {
+    formik.resetForm();
+  };
+
   return (
-    <div className="card">
+    <div className="card mb-5">
       <div className="card-header">
         <h5 className="card-title">{title}</h5>
       </div>
       <div className="card-body">
         <form onSubmit={formik.handleSubmit}>
-          <div className="row " style={{ rowGap: "10px" }}>
+          <div className="row" style={{ rowGap: "10px" }}>
             {attributes.map((attribute) => (
-              <div className="col-6">{renderField(attribute)}</div>
+              <div className="col-6" key={attribute.name}>
+                {renderField(attribute)}
+              </div>
             ))}
           </div>
+          <div className="card-footer d-flex gap-10">
+            <button
+              type="button"
+              className="btn btn-light-primary"
+              onClick={handleReset}
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="btn btn-primary"
+              disabled={isLoading}
+            >
+              {isLoading ? <Spinner animation="border" size="sm" /> : "Submit"}
+            </button>
+          </div>
         </form>
-      </div>
-      <div className="card-footer d-flex gap-10">
-        <button
-          type="button"
-          className="btn btn-light-primary"
-          onClick={handleCancel}
-        >
-          Cancel
-        </button>
-        <button
-          disabled={formik.isSubmitting}
-          id="submit"
-          type="button"
-          className="btn btn-primary"
-        >
-          {formik.isSubmitting ? (
-            <Spinner animation="border" size="sm" className="" />
-          ) : (
-            "Submit"
-          )}
-        </button>
       </div>
     </div>
   );

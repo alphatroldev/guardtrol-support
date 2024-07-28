@@ -26,7 +26,7 @@ const DatePicker: FC<DatePickerProps> = ({ label, value, onChange }) => {
           enableTime: true,
           dateFormat: "Y-m-d H:i",
         }}
-        className="form-control form-control-solid"
+        className="form-control"
         placeholder="Pick date"
       />
     </div>

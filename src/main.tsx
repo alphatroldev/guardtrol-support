@@ -11,6 +11,10 @@ import "./_metronic/assets/fonticon/fonticon.css";
 import "./_metronic/assets/keenicons/duotone/style.css";
 import "./_metronic/assets/keenicons/outline/style.css";
 import "./_metronic/assets/keenicons/solid/style.css";
+import "react-toastify/dist/ReactToastify.css";
+import "flatpickr/dist/flatpickr.css";
+
+import { ToastContainer, toast } from "react-toastify";
 /**
  * TIP: Replace this style import with rtl styles to enable rtl mode
  *
@@ -40,6 +44,7 @@ const container = document.getElementById("root");
 if (container) {
   createRoot(container).render(
     <MetronicI18nProvider>
+      <ToastContainer />
       <Provider store={store}>
         <AppRoutes />
       </Provider>

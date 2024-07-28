@@ -103,6 +103,7 @@ const initialValues = {
   image: null,
   onboardingcomplete: false,
 };
+
 type Props = {
   show: boolean;
   handleClose: () => void;
@@ -118,9 +119,11 @@ const EditOrganization = ({ show, handleClose }: Props) => {
   const handleSubmit = (values: any) => {
     console.log("Form values:", values);
   };
+
   const handleCancel = (values: any) => {
     console.log("Form values:", values);
   };
+
   return (
     <ReusableFormModal
       attributes={attributes}

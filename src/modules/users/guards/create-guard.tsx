@@ -74,7 +74,7 @@ type Props = {
   handleClose: () => void;
 };
 
-const CreateBeatForm = ({ show, handleClose }: Props) => {
+const CreateGuardForm = ({ show, handleClose }: Props) => {
   useEffect(() => {
     initMap();
   }, []);
@@ -101,4 +101,4 @@ const CreateBeatForm = ({ show, handleClose }: Props) => {
   );
 };
 
-export default CreateBeatForm;
+export default CreateGuardForm;

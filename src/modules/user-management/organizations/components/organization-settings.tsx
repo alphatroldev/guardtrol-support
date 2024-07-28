@@ -1,12 +1,16 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { KTIcon, toAbsoluteUrl } from "../../../../_metronic/helpers";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { Dropdown1 } from "../../../../_metronic/partials";
 import { CreateOrganization } from "../create-organization";
-import { useGetOrganizationByIdQuery } from "../../../../services/organization";
+import {
+  useGetOrganizationByIdQuery,
+  useUpdateOrganizationMutation,
+} from "../../../../services/organization";
 import ReusableFormModal from "../../../../components/form/ReusableFormModal";
 import * as Yup from "yup";
 import ReusableForm from "../../../../components/form/ReusableForm";
+import { toast } from "react-toastify";
 
 const attributes = [
   {
@@ -25,15 +29,7 @@ const attributes = [
       .email("Invalid email")
       .required("Email is required"),
   },
-  {
-    name: "password",
-    label: "Password",
-    type: "password",
-    placeholder: "Enter password",
-    validation: Yup.string()
-      .min(6, "Password must be at least 6 characters")
-      .required("Password is required"),
-  },
+
   {
     name: "address",
     label: "Address",
@@ -41,24 +37,7 @@ const attributes = [
     placeholder: "Enter address",
     validation: Yup.string().required("Address is required"),
   },
-  {
-    name: "isOwner",
-    label: "Is Owner",
-    type: "checkbox",
-    validation: Yup.boolean().oneOf([true], "Must be checked to proceed"),
-  },
-  {
-    name: "roles",
-    label: "Roles",
-    type: "select",
-    options: [
-      { value: "admin", label: "Admin" },
-      { value: "user", label: "User" },
-    ],
-    validation: Yup.array()
-      .of(Yup.string().required("Role is required"))
-      .required("At least one role is required"),
-  },
+
   {
     name: "phone",
     label: "Phone",
@@ -74,33 +53,29 @@ const attributes = [
     validation: Yup.string().required("WhatsApp number is required"),
   },
   {
-    name: "image",
+    name: "profile",
     label: "Profile Image",
     type: "file",
     validation: Yup.mixed().required("Profile image is required"),
   },
-  {
-    name: "onboardingcomplete",
-    label: "Onboarding Complete",
-    type: "checkbox",
-    validation: Yup.boolean().oneOf([true], "Must be checked to proceed"),
-  },
 ];
 
-const initialValues = {
-  name: "",
-  email: "",
-  password: "",
-  address: "",
-  isOwner: false,
-  roles: [],
-  phone: "",
-  whatsappNumber: "",
-  image: null,
-  onboardingcomplete: false,
-};
+interface editOrganizationType {
+  name: string;
+  email: string;
+  address: string;
+  phone: string;
+  whatsappNumber: string;
+  profile: null;
+}
+
 const OrganizationSettings: FC = () => {
   const { organizationId } = useParams();
+  const [organizationData, setOrganizationData] =
+    useState<null | editOrganizationType>();
+
+  const [updateOrganization, { isLoading: isUpdatingOrganization }] =
+    useUpdateOrganizationMutation();
 
   const { data: organization, isLoading } = useGetOrganizationByIdQuery(
     organizationId || "",
@@ -109,18 +84,39 @@ const OrganizationSettings: FC = () => {
     }
   );
 
-  const handleSubmit = (values: any) => {
-    console.log("Form values:", values);
+  const handleSubmit = async (values: any) => {
+    const response = await updateOrganization({
+      id: organizationId || "",
+      data: values,
+    });
+
+    if (response.data?.success) {
+      console.log(`Organization Updated`);
+      toast.success("Organization Updated");
+    }
   };
-  const handleCancel = (values: any) => {
-    console.log("Form values:", values);
-  };
+
+  const handleCancel = (values: any) => {};
+
+  useEffect(() => {
+    if (organization) {
+      setOrganizationData({
+        name: organization?.name || "",
+        email: organization?.email || "",
+        address: organization?.address || "",
+        phone: organization?.phone || "",
+        whatsappNumber: organization?.whatsappNumber || "",
+        profile: null,
+      });
+    }
+  }, [organization]);
   return (
     <>
-      {!isLoading && organization && (
+      {!isLoading && organizationData && (
         <ReusableForm
+          isLoading={isUpdatingOrganization}
           attributes={attributes}
-          initialValues={initialValues}
+          initialValues={organizationData}
           onSubmit={handleSubmit}
           title="Edit Organization"
           handleCancel={handleCancel}

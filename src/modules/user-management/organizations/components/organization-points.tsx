@@ -14,11 +14,12 @@ const OrganizationPoints: FC = () => {
   const [limit, setLimit] = useState<number>(10);
   const { organizationId } = useParams();
 
-  const { data, error, isLoading, refetch, isFetching } = useGetPointsQuery({
-    page,
-    limit,
-    organization: organizationId,
-  });
+  const { data, error, isError, isLoading, refetch, isFetching } =
+    useGetPointsQuery({
+      page,
+      limit,
+      organization: organizationId,
+    });
 
   const columns = [
     { header: "Name", accessor: "name" },
@@ -33,10 +34,10 @@ const OrganizationPoints: FC = () => {
         columns={columns}
         isLoading={isLoading}
         isFetching={isFetching}
-        error={error || null}
+        error={error || false}
         title={"Points"}
         buttonText={"Create"}
-        showButton={true}
+        showButton={false}
         onClick={() => setShowCreateBeatModal(true)}
         total={data?.total}
         pagination={{

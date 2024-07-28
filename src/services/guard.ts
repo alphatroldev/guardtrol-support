@@ -10,11 +10,11 @@ export const guardApi = baseApi.injectEndpoints({
     getGuardById: builder.query<IGuard, string>({
       query: (id) => `guards/${id}`,
     }),
-    createGuard: builder.mutation<IGuard, Partial<IGuard>>({
-      query: (guard) => ({
-        url: "guards",
+    createGuard: builder.mutation<{ success: boolean }, Partial<any>>({
+      query: ({ organizationId, data }) => ({
+        url: `guards/${organizationId}`,
         method: "POST",
-        body: guard,
+        body: data,
       }),
     }),
     updateGuard: builder.mutation<

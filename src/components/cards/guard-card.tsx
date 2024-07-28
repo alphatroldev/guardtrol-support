@@ -7,7 +7,7 @@ const GuardCard = ({ name, phone, status, isactive, profileImage }: any) => {
   console.log(name);
   return (
     <div className="card">
-      <div className="card-body d-flex flex-center gap-3 p-4">
+      <div className="card-body d-flex flex-center flex-wrap gap-3 p-4">
         <div className="mb-5">
           <div className="symbol symbol-75px ">
             {color ? (
@@ -28,9 +28,10 @@ const GuardCard = ({ name, phone, status, isactive, profileImage }: any) => {
           >
             <span className="fs-4 text-gray-800 text-hover-primary fw-bolder mb-0">
               {name}
-            </span>
+            </span>{" "}
+            <br />
             {isactive ? (
-              <span className="badge badge-light-success fw-bolder fs-8 px-2 py-1 ms-2">
+              <span className="badge badge-light-success fw-bolder fs-8 ">
                 Active
               </span>
             ) : (
@@ -46,7 +47,7 @@ const GuardCard = ({ name, phone, status, isactive, profileImage }: any) => {
           <div className="fw-bold text-gray-500 mb-1"></div>
 
           <div className="fw-bold fs-7 text-gray-500 mb-1">{phone}</div>
-
+          {/* 
           <div className="d-flex flex-center flex-wrap mb-5 gap-2">
             <div className="border border-gray-300 border-dashed rounded min-w-125px px-4 py-3 mb-3">
               <div className="fs-7 fw-bolder text-gray-700">GBB Wuse</div>
@@ -57,7 +58,7 @@ const GuardCard = ({ name, phone, status, isactive, profileImage }: any) => {
               <div className="fs-7 fw-bolder text-gray-700">5hrs Ago</div>
               <div className="fw-bold text-gray-500">Last Patrol</div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

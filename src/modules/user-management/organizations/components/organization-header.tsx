@@ -45,10 +45,10 @@ const OrganizationHeader: FC = () => {
                 <img
                   src={
                     organization?.image
-                      ? `${ASSETS_URL + organization?.image}`
+                      ? `${ASSETS_URL + "/" + organization?.image}`
                       : toAbsoluteUrl("media/avatars/blank.png")
                   }
-                  alt="Metornic"
+                  alt={`${organization?.name}`}
                 />
               </div>
             </div>
@@ -191,6 +191,19 @@ const OrganizationHeader: FC = () => {
                   to={`/user-management/organizations/${params?.organizationId}/patrols`}
                 >
                   Patrols
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link
+                  className={
+                    `nav-link text-active-primary me-6 ` +
+                    (location.pathname ===
+                      `/user-management/organizations/${params?.organizationId}/subscriptions` &&
+                      "active")
+                  }
+                  to={`/user-management/organizations/${params?.organizationId}/subscriptions`}
+                >
+                  Subscriptions
                 </Link>
               </li>
               <li className="nav-item">

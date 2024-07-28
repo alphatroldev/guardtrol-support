@@ -3,13 +3,14 @@ import { useGetOrganizationsQuery } from "../services/organization";
 import Select from "react-select";
 import { KTIcon } from "../_metronic/helpers";
 import { Spinner } from "react-bootstrap";
+import CustomButton from "./common/Button";
 
 interface ReusableTableProps {
   data: any[];
   columns: { header: string; accessor: string }[];
   isLoading: boolean;
   isFetching: boolean;
-  error: any | null;
+  error: any;
   buttonText?: string;
   showButton?: boolean;
   hasViewBtn?: boolean;
@@ -40,6 +41,7 @@ const ReusableTable: FC<ReusableTableProps> = ({
   isLoading,
   isFetching,
   error,
+  showButton,
   total,
   hasEditBtn,
   pagination,
@@ -73,6 +75,7 @@ const ReusableTable: FC<ReusableTableProps> = ({
     }
     return pageNumbers;
   };
+
   return (
     <div className={`card `}>
       <div className="card-header border-0 pt-5">
@@ -83,50 +86,63 @@ const ReusableTable: FC<ReusableTableProps> = ({
           </span>
         </h3>
         <div className="card-toolbar d-flex gap-2">
-          <button
-            onClick={refetch}
-            disabled={isFetching}
-            className="btn btn-sm d-flex gap-2 justify-content-center align-items-center fw-bold btn-primary"
-          >
-            {isFetching ? (
-              <Spinner animation="border" className="" />
-            ) : (
-              "Refetch"
-            )}
-          </button>
-          <button onClick={onClick} className="btn btn-sm fw-bold btn-primary">
-            {buttonText}
-          </button>
+          <CustomButton
+            showLoading={isFetching && !error}
+            btnAction={refetch}
+            btnText={"Refetch"}
+          />
+          {showButton && !error && (
+            <CustomButton btnAction={onClick} btnText={buttonText || ""} />
+          )}
         </div>
       </div>
       <div className="card-body py-3">
         <div className="table-responsive">
-          {error && <p className="text-danger">{error}</p>}
-          {!isLoading && !error && (
-            <>
-              <table className="table align-middle gs-0 gy-4">
-                <thead>
-                  <tr className="fw-bold text-muted bg-light">
-                    {columns.map((col, i) => {
-                      console.log(i === columns?.length - 1 && "rounded-end");
-                      return (
-                        <th
-                          className={`ps-4  ${i === 0 && "rounded-start"} ${
-                            i === columns?.length - 1 &&
-                            !hasViewBtn &&
-                            "rounded-end"
-                          }`}
-                          key={col.accessor}
-                        >
-                          {col.header}
-                        </th>
-                      );
-                    })}
-                    {hasViewBtn && (
-                      <th className={`ps-4 rounded-end`}>Actions</th>
-                    )}
-                  </tr>
-                </thead>
+          <>
+            <table className="table align-middle gs-0 gy-4">
+              <thead>
+                <tr className="fw-bold text-muted bg-light">
+                  {columns.map((col, i) => {
+                    console.log(i === columns?.length - 1 && "rounded-end");
+                    return (
+                      <th
+                        className={`ps-4  ${i === 0 && "rounded-start"} ${
+                          i === columns?.length - 1 &&
+                          !hasViewBtn &&
+                          "rounded-end"
+                        }`}
+                        key={col.accessor}
+                      >
+                        {col.header}
+                      </th>
+                    );
+                  })}
+                  {hasViewBtn && (
+                    <th className={`ps-4 rounded-end`}>Actions</th>
+                  )}
+                </tr>
+              </thead>
+              {(isLoading || isFetching) && (
+                <tr>
+                  <td colSpan={columns.length + 1}>
+                    <div className=" justify-content-center align-items-center d-flex py-10">
+                      <Spinner animation="border" className="" />
+                    </div>
+                  </td>
+                </tr>
+              )}
+              {error && !isFetching && (
+                <tr>
+                  <td colSpan={columns.length + 1}>
+                    <div className=" justify-content-center align-items-center d-flex py-10">
+                      <p className="text-danger text-center fw-semibold">
+                        Error: {error.data.error}
+                      </p>
+                    </div>
+                  </td>
+                </tr>
+              )}
+              {(!isLoading || !isFetching) && !error && (
                 <tbody>
                   {data?.length === 0 && (
                     <tr>
@@ -137,15 +153,7 @@ const ReusableTable: FC<ReusableTableProps> = ({
                       </td>
                     </tr>
                   )}
-                  {(isLoading || isFetching) && (
-                    <tr>
-                      <td colSpan={columns.length + 1}>
-                        <div className=" justify-content-center align-items-center d-flex py-10">
-                          <Spinner animation="border" className="" />
-                        </div>
-                      </td>
-                    </tr>
-                  )}
+
                   {!isFetching &&
                     data.map((row, rowIndex) => (
                       <tr key={rowIndex}>
@@ -186,59 +194,59 @@ const ReusableTable: FC<ReusableTableProps> = ({
                       </tr>
                     ))}
                 </tbody>
-              </table>
-              <div className="d-flex justify-content-between">
-                <Select
-                  className="react-select-styled"
-                  classNamePrefix="react-select"
-                  options={options}
-                  defaultValue={options.find(
-                    (opt) => opt.value === filters.limit
-                  )}
-                  onChange={(option) => filters.onLimitChange(option!.value)}
-                />
-                <nav aria-label="Page navigation">
-                  <ul className="pagination">
-                    <li
-                      onClick={() =>
-                        pagination.onPageChange(pagination.currentPage - 1)
-                      }
-                      className={`page-item ${
-                        pagination.currentPage === 1 ? "disabled" : ""
-                      }`}
+              )}
+            </table>
+            <div className="d-flex justify-content-between">
+              <Select
+                className="react-select-styled"
+                classNamePrefix="react-select"
+                options={options}
+                defaultValue={options.find(
+                  (opt) => opt.value === filters.limit
+                )}
+                onChange={(option) => filters.onLimitChange(option!.value)}
+              />
+              <nav aria-label="Page navigation">
+                <ul className="pagination">
+                  <li
+                    onClick={() =>
+                      pagination.onPageChange(pagination.currentPage - 1)
+                    }
+                    className={`page-item ${
+                      pagination.currentPage === 1 ? "disabled" : ""
+                    }`}
+                  >
+                    <button
+                      className="page-link"
+                      disabled={pagination.currentPage === 1}
                     >
-                      <button
-                        className="page-link"
-                        disabled={pagination.currentPage === 1}
-                      >
-                        &laquo;
-                      </button>
-                    </li>
-                    {renderPageNumbers()}
-                    <li
-                      onClick={() =>
-                        pagination.onPageChange(pagination.currentPage + 1)
-                      }
-                      className={`page-item ${
+                      &laquo;
+                    </button>
+                  </li>
+                  {renderPageNumbers()}
+                  <li
+                    onClick={() =>
+                      pagination.onPageChange(pagination.currentPage + 1)
+                    }
+                    className={`page-item ${
+                      pagination.currentPage === pagination.totalPages
+                        ? "disabled"
+                        : ""
+                    }`}
+                  >
+                    <button
+                      className="page-link"
+                      disabled={
                         pagination.currentPage === pagination.totalPages
-                          ? "disabled"
-                          : ""
-                      }`}
+                      }
                     >
-                      <button
-                        className="page-link"
-                        disabled={
-                          pagination.currentPage === pagination.totalPages
-                        }
-                      >
-                        &raquo;
-                      </button>
-                    </li>
-                  </ul>
-                </nav>
-              </div>
-            </>
-          )}
+                      &raquo;
+                    </button>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </>
         </div>
       </div>
     </div>

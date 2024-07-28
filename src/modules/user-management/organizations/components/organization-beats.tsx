@@ -5,6 +5,7 @@ import { Dropdown1 } from "../../../../_metronic/partials";
 import AllBeats from "../../../users/beats/all";
 import { useGetBeatsQuery } from "../../../../services/beat";
 import ReusableTable from "../../../../components/ReusableTable";
+import CreateBeatForm from "./create-beat";
 
 const OrganizationBeats: FC = () => {
   const [showCreateBeatModal, setShowCreateBeatModal] =
@@ -12,11 +13,12 @@ const OrganizationBeats: FC = () => {
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(10);
   const { organizationId } = useParams();
-  const { data, error, isLoading, refetch, isFetching } = useGetBeatsQuery({
-    page,
-    limit,
-    organization: organizationId,
-  });
+  const { data, error, isError, isLoading, refetch, isFetching } =
+    useGetBeatsQuery({
+      page,
+      limit,
+      organization: organizationId,
+    });
 
   const columns = [
     { header: "Name", accessor: "name" },
@@ -31,7 +33,7 @@ const OrganizationBeats: FC = () => {
         columns={columns}
         isLoading={isLoading}
         isFetching={isFetching}
-        error={error || null}
+        error={error || false}
         title={"Beats"}
         buttonText={"Create"}
         showButton={true}
@@ -47,6 +49,10 @@ const OrganizationBeats: FC = () => {
           onLimitChange: setLimit,
         }}
         refetch={refetch}
+      />
+      <CreateBeatForm
+        show={showCreateBeatModal}
+        handleClose={() => setShowCreateBeatModal(false)}
       />
     </>
   );

@@ -14,11 +14,12 @@ const OrganizationPatrols: FC = () => {
   const [limit, setLimit] = useState<number>(10);
   const { organizationId } = useParams();
 
-  const { data, error, isLoading, refetch, isFetching } = useGetPatrolsQuery({
-    page,
-    limit,
-    organization: organizationId,
-  });
+  const { data, error, isError, isLoading, refetch, isFetching } =
+    useGetPatrolsQuery({
+      page,
+      limit,
+      organization: organizationId,
+    });
 
   const columns = [
     { header: "Name", accessor: "name" },
@@ -33,11 +34,11 @@ const OrganizationPatrols: FC = () => {
         data={data?.data || []}
         columns={columns}
         isLoading={isLoading}
+        error={error || false}
         isFetching={isFetching}
-        error={error || null}
         title={"Patrols"}
         buttonText={"Create"}
-        showButton={true}
+        showButton={false}
         onClick={() => setShowCreateBeatModal(true)}
         total={data?.total}
         pagination={{
