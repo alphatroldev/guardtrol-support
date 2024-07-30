@@ -7,7 +7,11 @@ import { useGetPointsQuery } from "../../../../services/point";
 import { useGetGuardsQuery } from "../../../../services/guard";
 import { useGetBeatsQuery } from "../../../../services/beat";
 import { useGetOrganizationByIdQuery } from "../../../../services/organization";
-import { API_BASE_URL, ASSETS_URL } from "../../../../utils/constants";
+import {
+  API_BASE_URL,
+  ASSETS_URL,
+  CLIENT_URL,
+} from "../../../../utils/constants";
 import CustomButton from "../../../../components/common/Button";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../../redux/slice/authSlice";
@@ -50,7 +54,7 @@ const OrganizationHeader: FC = () => {
       );
 
       const clientAuthToken = clientTokenResponse?.data?.token;
-      const clientConsoleUrl = `http://localhost:3000/auth?support_token=${clientAuthToken}`;
+      const clientConsoleUrl = `${CLIENT_URL}/auth?support_token=${clientAuthToken}`;
       // const clientConsoleUrl = `https://guardtrol.alphatrol.com/?support_token=${clientAuthToken}`;
       window.open(clientConsoleUrl, "_blank"); // Open in a new tab
     } catch (error) {
