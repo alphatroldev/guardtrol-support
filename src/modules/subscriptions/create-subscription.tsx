@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import * as Yup from "yup";
-import ReusableForm from "../../../../components/form/ReusableFormModal";
+import ReusableForm from "../../components/form/ReusableFormModal";
 import { useParams } from "react-router-dom";
 import {
   useGetOrganizationByIdQuery,
   useGetOrganizationsQuery,
-} from "../../../../services/organization";
-import { useCreateSubscriptionMutation } from "../../../../services/subscription";
+} from "../../services/organization";
+import { useCreateSubscriptionMutation } from "../../services/subscription";
 import { toast } from "react-toastify";
 
 const today = new Date();
@@ -41,6 +41,15 @@ const CreateSubscriptionForm = ({ show, handleClose }: Props) => {
     page: 10,
     limit: 0,
   });
+
+  console.log([
+    ...(organizationApiResponse?.data
+      ? organizationApiResponse?.data.map((e) => ({
+          value: e._id,
+          label: e.name,
+        }))
+      : []),
+  ]);
   const subscriptionAttributes = [
     {
       name: "maxbeats",
@@ -69,6 +78,35 @@ const CreateSubscriptionForm = ({ show, handleClose }: Props) => {
             }))
           : []),
       ],
+    },
+    {
+      name: "duration",
+      label: "Duration",
+      type: "select",
+      validation: Yup.string().required("Duration is required"),
+      options: [
+        {
+          value: "7",
+          label: "7 Days",
+        },
+        {
+          value: "14",
+          label: "14 Days",
+        },
+        {
+          value: "30",
+          label: "30 Days",
+        },
+      ],
+    },
+    {
+      name: "startsAt",
+      label: "Start Date",
+      type: "date",
+      placeholder: "Select start date",
+      validation: Yup.date()
+        .required("Start date is required")
+        .min(today, "Start date must be in the future"),
     },
   ];
   const { data: organization, isLoading } = useGetOrganizationByIdQuery(

@@ -7,12 +7,17 @@ import { useGetPointsQuery } from "../../../../services/point";
 import { useGetGuardsQuery } from "../../../../services/guard";
 import { useGetBeatsQuery } from "../../../../services/beat";
 import { useGetOrganizationByIdQuery } from "../../../../services/organization";
-import { ASSETS_URL } from "../../../../utils/constants";
+import { API_BASE_URL, ASSETS_URL } from "../../../../utils/constants";
+import CustomButton from "../../../../components/common/Button";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../../../redux/slice/authSlice";
+import axios from "axios";
 
 const OrganizationHeader: FC = () => {
   const location = useLocation();
   const params = useParams();
   const { organizationId } = useParams();
+  const user = useSelector(selectUser);
 
   const { data: patrolApiResponse } = useGetPatrolsQuery({
     organization: organizationId,
@@ -34,7 +39,25 @@ const OrganizationHeader: FC = () => {
     }
   );
 
-  console.log(organization);
+  const handleClientConsoleLogin = async () => {
+    try {
+      const clientTokenResponse = await axios.post(
+        `${API_BASE_URL}/auth/generate-client-console-access`,
+        {
+          supportUserId: user?._id,
+          organizationId,
+        }
+      );
+
+      const clientAuthToken = clientTokenResponse?.data?.token;
+      const clientConsoleUrl = `http://localhost:3000/auth?support_token=${clientAuthToken}`;
+      // const clientConsoleUrl = `https://guardtrol.alphatrol.com/?support_token=${clientAuthToken}`;
+      window.open(clientConsoleUrl, "_blank"); // Open in a new tab
+    } catch (error) {
+      console.error("Error generating client console access token:", error);
+    }
+  };
+
   return (
     <>
       <div className="card mb-5 mb-xl-10">
@@ -86,19 +109,18 @@ const OrganizationHeader: FC = () => {
                   </div>
                 </div>
 
-                {/* <div className="d-flex my-4">
+                <div className="d-flex my-4">
                   <div className="me-0">
-                    <button
-                      className="btn btn-sm btn-icon btn-bg-light btn-active-color-primary"
-                      data-kt-menu-trigger="click"
-                      data-kt-menu-placement="bottom-end"
-                      data-kt-menu-flip="top-end"
-                    >
-                      <i className="bi bi-three-dots fs-3"></i>
-                    </button>
+                    <div className="card-toolbar">
+                      <CustomButton
+                        showLoading={false}
+                        btnAction={() => handleClientConsoleLogin()}
+                        btnText="Login to client console"
+                      />
+                    </div>
                     <Dropdown1 />
                   </div>
-                </div> */}
+                </div>
               </div>
 
               <div className="d-flex flex-wrap flex-stack">
@@ -154,7 +176,7 @@ const OrganizationHeader: FC = () => {
                   Overview
                 </Link>
               </li>
-              <li className="nav-item">
+              {/* <li className="nav-item">
                 <Link
                   className={
                     `nav-link text-active-primary me-6 ` +
@@ -192,7 +214,7 @@ const OrganizationHeader: FC = () => {
                 >
                   Patrols
                 </Link>
-              </li>
+              </li> */}
               <li className="nav-item">
                 <Link
                   className={
@@ -206,7 +228,7 @@ const OrganizationHeader: FC = () => {
                   Subscriptions
                 </Link>
               </li>
-              <li className="nav-item">
+              {/* <li className="nav-item">
                 <Link
                   className={
                     `nav-link text-active-primary me-6 ` +
@@ -231,7 +253,7 @@ const OrganizationHeader: FC = () => {
                 >
                   Settings
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </div>
         </div>

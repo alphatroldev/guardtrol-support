@@ -1,21 +1,22 @@
-import { FC, useState } from "react";
-import { KTIcon, toAbsoluteUrl } from "../../../../_metronic/helpers";
-import { Link, useLocation, useParams } from "react-router-dom";
-import { Dropdown1 } from "../../../../_metronic/partials";
-import AllSubscriptions from "../../../users/beats/all";
-import { useGetSubscriptionsQuery } from "../../../../services/subscription";
-import ReusableTable from "../../../../components/ReusableTable";
+import React, { useState } from "react";
 
-import { ISubscription } from "../../../../types/subscription";
-import { formatDateTime } from "../../../../utils/dateUtils";
+import { useGetOrganizationsQuery } from "../../services/organization";
+import { ToolbarWrapper } from "../../_metronic/layout/components/toolbar";
+import { Content } from "../../_metronic/layout/components/content";
+import { PageTitle } from "../../_metronic/layout/core";
+import ReusableTable from "../../components/ReusableTable";
+import { useNavigate } from "react-router-dom";
+import { usersManagementBreadCrumbs } from "../../breadcrumbs/usersManagementBreadCrumbs";
+import { useGetSubscriptionsQuery } from "../../services/subscription";
+import { ISubscription } from "../../types/subscription";
+import { formatDateTime } from "../../utils/dateUtils";
 import CreateSubscriptionForm from "./create-subscription";
 
-const OrganizationSubscriptions: FC = () => {
+const AllSubscriptions = () => {
   const [showCreateSubscriptionModal, setShowCreateSubscriptionModal] =
     useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(10);
-  const { organizationId } = useParams();
 
   const {
     data: subscriptionsApiResponse,
@@ -27,7 +28,6 @@ const OrganizationSubscriptions: FC = () => {
   } = useGetSubscriptionsQuery({
     page,
     limit,
-    organization: organizationId,
   });
 
   const columns = [
@@ -58,7 +58,7 @@ const OrganizationSubscriptions: FC = () => {
         isFetching={isFetching}
         error={error || false}
         title={"Subscriptions"}
-        buttonText={"Create"}
+        buttonText={"Free Trial"}
         showButton={true}
         onClick={() => setShowCreateSubscriptionModal(true)}
         total={subscriptionsApiResponse?.total}
@@ -83,4 +83,4 @@ const OrganizationSubscriptions: FC = () => {
   );
 };
 
-export { OrganizationSubscriptions };
+export default AllSubscriptions;

@@ -35,7 +35,7 @@ const SidebarMenuMain = () => {
           title={intl.formatMessage({ id: "MENU.ORGANIZATIONS" })}
           hasBullet={true}
         />
-        <SidebarMenuItem
+        {/* <SidebarMenuItem
           to="/user-management/roles"
           title={intl.formatMessage({ id: "MENU.ROLE_MANAGEMENT" })}
           hasBullet={true}
@@ -44,7 +44,7 @@ const SidebarMenuMain = () => {
           to="/user-management/activity-logs"
           title={intl.formatMessage({ id: "MENU.ACTIVITY_LOGS" })}
           hasBullet={true}
-        />
+        /> */}
       </SidebarMenuItemWithSub>
 
       <SidebarMenuItemWithSub
@@ -54,6 +54,11 @@ const SidebarMenuMain = () => {
         icon="wallet"
       >
         <SidebarMenuItem
+          to="/subscription-management/all-subscriptions"
+          title={"All"}
+          hasBullet={true}
+        />
+        {/* <SidebarMenuItem
           to="/subscription-management/plans"
           title={intl.formatMessage({ id: "MENU.PLAN_MANAGEMENT" })}
           hasBullet={true}
@@ -72,37 +77,37 @@ const SidebarMenuMain = () => {
           to="/subscription-management/notifications"
           title={intl.formatMessage({ id: "MENU.NOTIFICATIONS" })}
           hasBullet={true}
-        />
+        /> */}
       </SidebarMenuItemWithSub>
 
-      <SidebarMenuItemWithSub
-        to="/ticketing-system"
-        title={intl.formatMessage({ id: "MENU.TICKETING_SYSTEM" })}
-        fontIcon="bi-ticket"
-        icon="cheque"
-      >
-        <SidebarMenuItem
-          to="/ticketing-system/create"
-          title={intl.formatMessage({ id: "MENU.TICKET_CREATION" })}
-          hasBullet={true}
-        />
-        <SidebarMenuItem
-          to="/ticketing-system/assignment"
-          title={intl.formatMessage({ id: "MENU.TICKET_ASSIGNMENT" })}
-          hasBullet={true}
-        />
-        <SidebarMenuItem
-          to="/ticketing-system/status-tracking"
-          title={intl.formatMessage({ id: "MENU.TICKET_STATUS_TRACKING" })}
-          hasBullet={true}
-        />
-        <SidebarMenuItem
-          to="/ticketing-system/response-management"
-          title={intl.formatMessage({ id: "MENU.RESPONSE_MANAGEMENT" })}
-          hasBullet={true}
-        />
-      </SidebarMenuItemWithSub>
-
+      {/* <SidebarMenuItemWithSub
+          to="/ticketing-system"
+          title={intl.formatMessage({ id: "MENU.TICKETING_SYSTEM" })}
+          fontIcon="bi-ticket"
+          icon="cheque"
+        >
+          <SidebarMenuItem
+            to="/ticketing-system/create"
+            title={intl.formatMessage({ id: "MENU.TICKET_CREATION" })}
+            hasBullet={true}
+          />
+          <SidebarMenuItem
+            to="/ticketing-system/assignment"
+            title={intl.formatMessage({ id: "MENU.TICKET_ASSIGNMENT" })}
+            hasBullet={true}
+          />
+          <SidebarMenuItem
+            to="/ticketing-system/status-tracking"
+            title={intl.formatMessage({ id: "MENU.TICKET_STATUS_TRACKING" })}
+            hasBullet={true}
+          />
+          <SidebarMenuItem
+            to="/ticketing-system/response-management"
+            title={intl.formatMessage({ id: "MENU.RESPONSE_MANAGEMENT" })}
+            hasBullet={true}
+          />
+        </SidebarMenuItemWithSub> */}
+      {/* 
       <SidebarMenuItemWithSub
         to="/analytics-reporting"
         title={intl.formatMessage({ id: "MENU.ANALYTICS_REPORTING" })}
@@ -124,9 +129,9 @@ const SidebarMenuMain = () => {
           title={intl.formatMessage({ id: "MENU.INSIGHTS" })}
           hasBullet={true}
         />
-      </SidebarMenuItemWithSub>
+      </SidebarMenuItemWithSub> */}
 
-      <SidebarMenuItemWithSub
+      {/* <SidebarMenuItemWithSub
         to="/notifications-alerts"
         title={intl.formatMessage({ id: "MENU.NOTIFICATIONS_ALERTS" })}
         fontIcon="bi-bell"
@@ -278,7 +283,7 @@ const SidebarMenuMain = () => {
           title={intl.formatMessage({ id: "MENU.MARKETING_TOOLS" })}
           hasBullet={true}
         />
-      </SidebarMenuItemWithSub>
+      </SidebarMenuItemWithSub> */}
     </>
   );
 };

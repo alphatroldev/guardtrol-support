@@ -4,7 +4,7 @@ import { RootState } from "../store";
 interface AuthState {
   token: string | null;
   isAuthenticated: boolean;
-  user: { id: string; email: string; name: string; role: string } | null;
+  user: { _id: string; email: string; name: string; role: string } | null;
 }
 
 const initialState: AuthState = {

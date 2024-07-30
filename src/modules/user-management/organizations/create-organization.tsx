@@ -1,14 +1,5 @@
 import { FC } from "react";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { Modal } from "react-bootstrap";
-import { KTIcon } from "../../../_metronic/helpers";
-import Input from "../../../components/form/inputs";
-import DatePicker from "../../../components/form/DatePicker";
-import CustomSelect from "../../../components/form/Select";
-import Checkbox from "../../../components/form/Checkbox";
-import Radio from "../../../components/form/Radio";
-import Switch from "../../../components/form/Switch";
-import ReusableForm from "../../../components/form/ReusableForm";
 import * as Yup from "yup";
 import ReusableFormModal from "../../../components/form/ReusableFormModal";
 
