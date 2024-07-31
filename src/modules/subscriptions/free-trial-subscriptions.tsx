@@ -27,6 +27,7 @@ const FreeTrialSubscriptions = () => {
     refetch,
     isFetching,
   } = useGetSubscriptionsQuery({
+    plan: "free trial",
     page,
     limit,
   });
