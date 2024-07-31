@@ -37,6 +37,7 @@ const CreateFreeTrialSubscriptionForm = ({ show, handleClose }: Props) => {
     error,
     refetch,
     isFetching,
+    isUninitialized,
   } = useGetOrganizationsQuery({
     page: 10,
     limit: 0,
@@ -65,7 +66,7 @@ const CreateFreeTrialSubscriptionForm = ({ show, handleClose }: Props) => {
       options: [
         ...(organizationApiResponse?.data
           ? organizationApiResponse?.data
-              .filter((org) => !org.subscriptions?.length && org.isOwner)
+              .filter((org) => org.subscriptions?.length === 0 && org.isOwner)
               .map((e) => {
                 return { value: e._id, label: e.name };
               })
@@ -109,8 +110,15 @@ const CreateFreeTrialSubscriptionForm = ({ show, handleClose }: Props) => {
       skip: !organizationId,
     }
   );
-
+  console.log(
+    organizationApiResponse?.data.filter(
+      (org) => org.subscriptions?.length === 0 && org.isOwner
+    )
+  );
   useEffect(() => {
+    if (!isUninitialized) {
+      refetch();
+    }
     initMap();
   }, []);
 

@@ -63,7 +63,7 @@ const AllSubscriptions = () => {
         error={error || false}
         title={"Subscriptions"}
         buttonText={"Free Trial"}
-        showButton={true}
+        showButton={false}
         onClick={() => setShowCreateSubscriptionModal(true)}
         total={subscriptionsApiResponse?.total}
         pagination={{

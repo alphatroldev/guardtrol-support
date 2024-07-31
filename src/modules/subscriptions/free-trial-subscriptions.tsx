@@ -32,6 +32,7 @@ const FreeTrialSubscriptions = () => {
   });
 
   const columns = [
+    { header: "Organization", accessor: "organization" },
     { header: "Plan", accessor: "plan" },
     { header: "Beats", accessor: "maxbeats" },
     { header: "Guards", accessor: "maxextraguards" },
@@ -43,8 +44,9 @@ const FreeTrialSubscriptions = () => {
   const formatSubscriptionsData = (data: ISubscription[]) => {
     return data
       .filter((sub) => sub.plan === "free trial")
-      .map((item) => ({
+      .map((item: any) => ({
         ...item,
+        organization: item.user.name,
         createdat: item.createdat ? formatDateTime(item.createdat) : "",
         startsAt: item.startsAt ? formatDateTime(item.startsAt) : "",
         expiresat: item.expiresat ? formatDateTime(item.expiresat) : "",
