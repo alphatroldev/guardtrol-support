@@ -40,7 +40,7 @@ const AllOrganizations: React.FC = () => {
         Organizations
       </PageTitle>
       <ReusableTable
-        data={data?.data || []}
+        data={data?.data.filter((org) => org.isOwner) || []}
         columns={columns}
         isLoading={isLoading}
         isFetching={isFetching}

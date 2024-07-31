@@ -58,6 +58,11 @@ const SidebarMenuMain = () => {
           title={"All"}
           hasBullet={true}
         />
+        <SidebarMenuItem
+          to="/subscription-management/free-trial"
+          title={"Free trial"}
+          hasBullet={true}
+        />
         {/* <SidebarMenuItem
           to="/subscription-management/plans"
           title={intl.formatMessage({ id: "MENU.PLAN_MANAGEMENT" })}

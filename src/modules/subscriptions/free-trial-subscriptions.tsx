@@ -11,9 +11,9 @@ import { useGetSubscriptionsQuery } from "../../services/subscription";
 import { ISubscription } from "../../types/subscription";
 import { formatDateTime } from "../../utils/dateUtils";
 import CreateSubscriptionForm from "./create-subscription";
-import { formatToNaira } from "../../utils/formatters";
+import CreateFreeTrialSubscriptionForm from "./create-free-trial-subscription";
 
-const AllSubscriptions = () => {
+const FreeTrialSubscriptions = () => {
   const [showCreateSubscriptionModal, setShowCreateSubscriptionModal] =
     useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
@@ -32,26 +32,23 @@ const AllSubscriptions = () => {
   });
 
   const columns = [
-    { header: "Organization", accessor: "organization" },
     { header: "Plan", accessor: "plan" },
     { header: "Beats", accessor: "maxbeats" },
     { header: "Guards", accessor: "maxextraguards" },
-    { header: "Total", accessor: "totalamount" },
-    { header: "Gateway", accessor: "paymentgateway" },
     { header: "Date Created", accessor: "createdat" },
     { header: "Start Date", accessor: "startsAt" },
     { header: "Expiry Date", accessor: "expiresat" },
   ];
 
   const formatSubscriptionsData = (data: ISubscription[]) => {
-    return data.map((item: any) => ({
-      ...item,
-      createdat: item.createdat ? formatDateTime(item.createdat) : "",
-      organization: item.user.name,
-      totalamount: formatToNaira(item.totalamount),
-      startsAt: item.startsAt ? formatDateTime(item.startsAt) : "",
-      expiresat: item.expiresat ? formatDateTime(item.expiresat) : "",
-    }));
+    return data
+      .filter((sub) => sub.plan === "free trial")
+      .map((item) => ({
+        ...item,
+        createdat: item.createdat ? formatDateTime(item.createdat) : "",
+        startsAt: item.startsAt ? formatDateTime(item.startsAt) : "",
+        expiresat: item.expiresat ? formatDateTime(item.expiresat) : "",
+      }));
   };
   return (
     <>
@@ -61,8 +58,8 @@ const AllSubscriptions = () => {
         isLoading={isLoading}
         isFetching={isFetching}
         error={error || false}
-        title={"Subscriptions"}
-        buttonText={"Free Trial"}
+        title={"Free Trial Subscriptions"}
+        buttonText={"Create"}
         showButton={true}
         onClick={() => setShowCreateSubscriptionModal(true)}
         total={subscriptionsApiResponse?.total}
@@ -79,7 +76,7 @@ const AllSubscriptions = () => {
         }}
         refetch={refetch}
       />
-      <CreateSubscriptionForm
+      <CreateFreeTrialSubscriptionForm
         show={showCreateSubscriptionModal}
         handleClose={() => setShowCreateSubscriptionModal(false)}
       />
@@ -87,4 +84,4 @@ const AllSubscriptions = () => {
   );
 };
 
-export default AllSubscriptions;
+export default FreeTrialSubscriptions;

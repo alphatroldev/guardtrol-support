@@ -17,7 +17,7 @@ const DatePicker: FC<DatePickerProps> = ({ label, value, onChange }) => {
   };
 
   return (
-    <div className="mb-10">
+    <div className="mb-1">
       <label className="form-label">{label}</label>
       <Flatpickr
         value={date}

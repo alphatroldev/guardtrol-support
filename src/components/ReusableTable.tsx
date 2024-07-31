@@ -136,7 +136,7 @@ const ReusableTable: FC<ReusableTableProps> = ({
                   <td colSpan={columns.length + 1}>
                     <div className=" justify-content-center align-items-center d-flex py-10">
                       <p className="text-danger text-center fw-semibold">
-                        Error: {error.data.error}
+                        Error: {error?.data?.error || "Network Unavailable"}
                       </p>
                     </div>
                   </td>

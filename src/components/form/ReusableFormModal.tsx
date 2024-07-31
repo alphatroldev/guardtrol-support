@@ -122,26 +122,40 @@ const ReusableFormModal: React.FC<ReusableFormProps> = ({
         );
       case "date":
         return (
-          <DatePicker
-            key={attribute.name}
-            label={attribute.label}
-            value={formik.values[attribute.name]}
-            onChange={(date: Date) =>
-              formik.setFieldValue(attribute.name, date)
-            }
-          />
+          <>
+            <DatePicker
+              key={attribute.name}
+              label={attribute.label}
+              value={formik.values[attribute.name]}
+              onChange={(date: Date) =>
+                formik.setFieldValue(attribute.name, date)
+              }
+            />{" "}
+            {formik.errors[attribute.name] && (
+              <ErrorMessage message={formik.errors[attribute.name]} />
+            )}
+          </>
         );
       case "select":
         return (
-          <CustomSelect
-            key={attribute.name}
-            label={attribute.label}
-            options={attribute.options || []}
-            value={formik.values[attribute.name]}
-            onChange={(option: any) =>
-              formik.setFieldValue(attribute.name, option)
-            }
-          />
+          <>
+            <CustomSelect
+              key={attribute.name}
+              label={attribute.label}
+              options={attribute.options || []}
+              value={
+                attribute.options?.find(
+                  (op) => op.value === formik.values[attribute.name]
+                ) || { label: "Select Option", value: "" }
+              }
+              onChange={(option: any) =>
+                formik.setFieldValue(attribute.name, option.value)
+              }
+            />
+            {formik.errors[attribute.name] && (
+              <ErrorMessage message={formik.errors[attribute.name]} />
+            )}
+          </>
         );
       case "checkbox":
         return (
@@ -154,6 +168,9 @@ const ReusableFormModal: React.FC<ReusableFormProps> = ({
               checked={formik.values[attribute.name]}
               onChange={formik.handleChange}
             />
+            {formik.errors[attribute.name] && (
+              <ErrorMessage message={formik.errors[attribute.name]} />
+            )}
           </>
         );
       case "radio":
@@ -173,6 +190,9 @@ const ReusableFormModal: React.FC<ReusableFormProps> = ({
                 />
               </div>
             ))}
+            {formik.errors[attribute.name] && (
+              <ErrorMessage message={formik.errors[attribute.name]} />
+            )}
           </div>
         );
       case "file":
@@ -190,6 +210,9 @@ const ReusableFormModal: React.FC<ReusableFormProps> = ({
                 formik.setFieldValue(attribute.name, file);
               }}
             />
+            {formik.errors[attribute.name] && (
+              <ErrorMessage message={formik.errors[attribute.name]} />
+            )}
           </div>
         );
       case "switch":
@@ -205,6 +228,9 @@ const ReusableFormModal: React.FC<ReusableFormProps> = ({
               checked={formik.values[attribute.name]}
               onChange={formik.handleChange}
             />
+            {formik.errors[attribute.name] && (
+              <ErrorMessage message={formik.errors[attribute.name]} />
+            )}
           </>
         );
       default:
