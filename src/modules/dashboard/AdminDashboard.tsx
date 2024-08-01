@@ -8,6 +8,7 @@ import { useGetOrganizationsQuery } from "../../services/organization";
 import { useGetGuardsQuery } from "../../services/guard";
 import { useGetPatrolsQuery } from "../../services/patrol";
 import { useGetSubscriptionsQuery } from "../../services/subscription";
+import { useGetBeatByIdQuery, useGetBeatsQuery } from "../../services/beat";
 
 const AdminDashboardPage: FC = () => {
   const [page, setPage] = useState<number>(1);
@@ -21,15 +22,20 @@ const AdminDashboardPage: FC = () => {
     page,
     limit,
   });
+  const { data: beatsApiResponse } = useGetBeatsQuery({
+    page,
+    limit,
+  });
 
   const { data: patrolsApiResponse } = useGetPatrolsQuery({
     page,
     limit,
   });
-
+  console.log(Date.now());
   const { data: subscriptionsApiResponse } = useGetSubscriptionsQuery({
     page,
     limit,
+    type: "active",
   });
 
   return (
@@ -76,8 +82,8 @@ const AdminDashboardPage: FC = () => {
               svgIcon="chart-pie-simple"
               color="white"
               iconColor="primary"
-              title={`${patrolsApiResponse?.total || 0}`}
-              description="Patrols"
+              title={`${beatsApiResponse?.total || 0}`}
+              description="Beats"
             />
           </div>
         </div>

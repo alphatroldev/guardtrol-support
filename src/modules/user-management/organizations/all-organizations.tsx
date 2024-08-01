@@ -8,39 +8,68 @@ import { PageTitle } from "../../../_metronic/layout/core";
 import ReusableTable from "../../../components/ReusableTable";
 import { useNavigate } from "react-router-dom";
 import { usersManagementBreadCrumbs } from "../../../breadcrumbs/usersManagementBreadCrumbs";
+import { IOrganization } from "../../../types/organization";
+import { ISubscription } from "../../../types/subscription";
+import { useDebouncedValue } from "../../../utils/helpers";
 
 const AllOrganizations: React.FC = () => {
   const [showCreateOrganizationModal, setShowCreateOrganizationModal] =
     useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(10);
+  const [filterParams, setFilterParams] = useState({ search: "" });
   const navigate = useNavigate();
 
   const handleViewOrganization = (organizationId: string) => {
-    console.log("first");
     navigate(`/user-management/organizations/${organizationId}`);
   };
+  const handleSearchChange = (e: any) => {
+    setFilterParams({ ...filterParams, search: e.target.value });
+  };
 
+  const debouncedSearchQuery = useDebouncedValue(filterParams.search);
+  console.log(debouncedSearchQuery);
   const { data, error, isLoading, refetch, isFetching } =
     useGetOrganizationsQuery({
+      isOwner: true,
       page,
+      ...(debouncedSearchQuery && { search: debouncedSearchQuery }),
       limit,
     });
 
   const columns = [
     { header: "Name", accessor: "name" },
     { header: "Email", accessor: "email" },
-    { header: "Address", accessor: "address" },
-    { header: "Whatsapp Number", accessor: "whatsappNumber" },
+    { header: "Subscription status", accessor: "subscriptionStatus" },
   ];
 
+  const formatSubscriptionsData = (data: IOrganization[]) => {
+    return data.map((org: any) => ({
+      ...org,
+      subscriptionStatus: org?.subscriptions?.find((sub: ISubscription) => {
+        console.log(org?.subscriptions);
+        return (
+          new Date(`${sub.startsAt}`) < new Date() &&
+          new Date(`${sub.expiresat}`) > new Date()
+        );
+      }) ? (
+        <span className="badge badge-light-success fw-bolder fs-8 px-2 py-1 ms-2">
+          Active
+        </span>
+      ) : (
+        <span className="badge badge-light-warning fw-bolder fs-8 px-2 py-1 ms-2">
+          Inactive
+        </span>
+      ),
+    }));
+  };
   return (
     <>
       <PageTitle breadcrumbs={usersManagementBreadCrumbs}>
         Organizations
       </PageTitle>
       <ReusableTable
-        data={data?.data.filter((org) => org.isOwner) || []}
+        data={formatSubscriptionsData(data?.data || [])}
         columns={columns}
         isLoading={isLoading}
         isFetching={isFetching}
@@ -48,6 +77,8 @@ const AllOrganizations: React.FC = () => {
         buttonText={"Create"}
         onClick={() => setShowCreateOrganizationModal(true)}
         showButton={true}
+        showSearch={true}
+        searchAction={handleSearchChange}
         onClickView={(organizationId) => handleViewOrganization(organizationId)}
         hasViewBtn={true}
         total={data?.total}

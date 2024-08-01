@@ -43,15 +43,13 @@ const FreeTrialSubscriptions = () => {
   ];
 
   const formatSubscriptionsData = (data: ISubscription[]) => {
-    return data
-      .filter((sub) => sub.plan === "free trial")
-      .map((item: any) => ({
-        ...item,
-        organization: item.user.name,
-        createdat: item.createdat ? formatDateTime(item.createdat) : "",
-        startsAt: item.startsAt ? formatDateTime(item.startsAt) : "",
-        expiresat: item.expiresat ? formatDateTime(item.expiresat) : "",
-      }));
+    return data.map((item: any) => ({
+      ...item,
+      organization: item.user.name,
+      createdat: item.createdat ? formatDateTime(item.createdat) : "",
+      startsAt: item.startsAt ? formatDateTime(item.startsAt) : "",
+      expiresat: item.expiresat ? formatDateTime(item.expiresat) : "",
+    }));
   };
   return (
     <>

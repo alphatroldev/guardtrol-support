@@ -59,7 +59,7 @@ const OrganizationSubscriptions: FC = () => {
         error={error || false}
         title={"Subscriptions"}
         buttonText={"Create"}
-        showButton={true}
+        showButton={false}
         onClick={() => setShowCreateSubscriptionModal(true)}
         total={subscriptionsApiResponse?.total}
         pagination={{

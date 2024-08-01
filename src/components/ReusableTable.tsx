@@ -15,6 +15,7 @@ interface ReusableTableProps {
   showButton?: boolean;
   hasViewBtn?: boolean;
   hasEditBtn?: boolean;
+  showSearch?: boolean;
   total: any | null;
   title: any | null;
   pagination: {
@@ -27,6 +28,7 @@ interface ReusableTableProps {
     onLimitChange: (limit: number) => void;
   };
   onClick?: () => void;
+  searchAction?: (e: any) => void;
   onClickView?: (id: any) => void;
   onClickEdit?: () => void;
   refetch: () => void;
@@ -45,6 +47,8 @@ const ReusableTable: FC<ReusableTableProps> = ({
   total,
   hasEditBtn,
   pagination,
+  showSearch,
+  searchAction,
   onClickView,
   onClickEdit,
   filters,
@@ -78,7 +82,7 @@ const ReusableTable: FC<ReusableTableProps> = ({
 
   return (
     <div className={`card `}>
-      <div className="card-header border-0 pt-5">
+      <div className="card-header  pt-5">
         <h3 className="card-title align-items-start flex-column">
           <span className="card-label fw-bold fs-3 mb-1">{title}</span>
           <span className="text-muted mt-1 fw-semibold fs-7">
@@ -86,6 +90,21 @@ const ReusableTable: FC<ReusableTableProps> = ({
           </span>
         </h3>
         <div className="card-toolbar d-flex gap-2">
+          {showSearch && (
+            <div className="d-flex align-items-center position-relative me-4">
+              <KTIcon
+                iconName="magnifier"
+                className="fs-3 position-absolute ms-3"
+              />
+              <input
+                type="text"
+                onChange={searchAction}
+                id="kt_filter_search"
+                className="form-control form-control-white form-control-sm w-150px ps-9"
+                placeholder="Search"
+              />
+            </div>
+          )}
           <CustomButton
             showLoading={isFetching && !error}
             btnAction={refetch}
@@ -118,7 +137,7 @@ const ReusableTable: FC<ReusableTableProps> = ({
                     );
                   })}
                   {hasViewBtn && (
-                    <th className={`ps-4 rounded-end`}>Actions</th>
+                    <th className={`ps-4 rounded-end text-center`}>Actions</th>
                   )}
                 </tr>
               </thead>

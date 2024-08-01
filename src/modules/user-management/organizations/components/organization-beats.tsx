@@ -36,7 +36,7 @@ const OrganizationBeats: FC = () => {
         error={error || false}
         title={"Beats"}
         buttonText={"Create"}
-        showButton={true}
+        showButton={false}
         onClick={() => setShowCreateBeatModal(true)}
         total={data?.total}
         pagination={{
