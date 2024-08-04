@@ -18,6 +18,7 @@ import { ToolbarWrapper } from "../../_metronic/layout/components/toolbar";
 import CreateFaq from "./faq/createFaq";
 import { useGetFaqCategoriesQuery } from "../../features/faq-categories";
 import { useGetFaqsQuery } from "../../features/faq";
+import CustomButton from "../../components/common/Button";
 
 const HelpCenter = () => {
   const [selectedFaq, setFAQ] = useState<IFaq | null>();
@@ -154,12 +155,12 @@ const HelpCenter = () => {
               <div className="d-flex gap-3">
                 {page === "tickets" && (
                   <>
-                    <button
+                    {/* <button
                       className="btn btn-primary fw-bold fs-8 fs-lg-base"
                       onClick={() => setIsOpenCreateTicket(true)}
                     >
                       Create Tickets
-                    </button>
+                    </button> */}
 
                     {currentUser?.role === "superadmin" && (
                       <button

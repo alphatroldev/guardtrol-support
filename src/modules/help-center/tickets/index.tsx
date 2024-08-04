@@ -5,6 +5,7 @@ import { selectUser } from "../../../redux/slice/authSlice";
 import { useGetTicketCategoriessQuery } from "../../../features/ticket-categories";
 import socket from "../../../services/sockets";
 import { toast } from "react-toastify";
+import CustomButton from "../../../components/common/Button";
 
 type Prop = {
   handleViewTicket: Function;
@@ -16,6 +17,8 @@ const HelpCenterTickets = ({ handleViewTicket }: Prop) => {
   const {
     data: ticketApiResponse,
     refetch: refetchTicket,
+    isFetching,
+    error,
     isUninitialized,
   } = useGetTicketsQuery({});
 
@@ -27,6 +30,18 @@ const HelpCenterTickets = ({ handleViewTicket }: Prop) => {
   return (
     <>
       <div className="card">
+        <div className="card-header  pt-5">
+          <h3 className="card-title align-items-start flex-column">
+            <span className="card-label fw-bold fs-3 mb-1">Tickets</span>
+          </h3>
+          <div className="card-toolbar d-flex gap-2">
+            <CustomButton
+              showLoading={isFetching && !error}
+              btnAction={refetchTicket}
+              btnText={"Refetch"}
+            />
+          </div>
+        </div>
         <div className="card-body">
           <div className="d-flex flex-column flex-xl-row p-7">
             <div className="flex-lg-row-fluid me-xl-15 mb-20 mb-xl-0">
@@ -45,7 +60,6 @@ const HelpCenterTickets = ({ handleViewTicket }: Prop) => {
                     />
                   </div>
                 </form>
-                <h1 className="text-dark mb-10">{"Tickets"}</h1>
                 <div className="mb-10">
                   {ticketApiResponse?.total ? (
                     ticketApiResponse?.data?.map((ticket) => (
@@ -87,7 +101,7 @@ const HelpCenterTickets = ({ handleViewTicket }: Prop) => {
                   ) : (
                     <div className="d-flex mb-10">
                       <span className="text-muted fw-semibold fs-6">
-                        You have not made any request
+                        No Tickets
                       </span>
                     </div>
                   )}
