@@ -3,7 +3,7 @@ import { Navigate, Routes } from "react-router-dom";
 import { useAuth } from "./core/Auth";
 import { persistor } from "../../redux/store";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
-import baseApi from "../../services/baseApi";
+import baseApi from "../../features/baseApi";
 import { clearAuth } from "../../redux/slice/authSlice";
 
 export function Logout() {

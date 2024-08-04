@@ -20,7 +20,7 @@ import { OrganizationSettings } from "./components/organization-settings";
 import { OrganizationPatrols } from "./components/organization-patrols";
 import { OrganizationPoints } from "./components/organization-points";
 import { OrganizationOverview } from "./components/organization-overview";
-import { useGetOrganizationByIdQuery } from "../../../services/organization";
+import { useGetOrganizationByIdQuery } from "../../../features/organization";
 import { Spinner } from "react-bootstrap";
 import { ResetOrganizationPassword } from "./components/organization-password-reset";
 import { OrganizationSubscriptions } from "./components/organization-subcription";

@@ -5,8 +5,8 @@ import { useParams } from "react-router-dom";
 import {
   useGetOrganizationByIdQuery,
   useGetOrganizationsQuery,
-} from "../../../../services/organization";
-import { useCreateSubscriptionMutation } from "../../../../services/subscription";
+} from "../../../../features/organization";
+import { useCreateSubscriptionMutation } from "../../../../features/subscription";
 import { toast } from "react-toastify";
 
 const today = new Date();

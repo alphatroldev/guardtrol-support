@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { useGetOrganizationsQuery } from "../services/organization";
+import { useGetOrganizationsQuery } from "../features/organization";
 import Select from "react-select";
 import { KTIcon } from "../_metronic/helpers";
 import { Spinner } from "react-bootstrap";

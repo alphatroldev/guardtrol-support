@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { clearAuth } from "../redux/slice/authSlice";
 import { persistor } from "../redux/store";
-import baseApi from "../services/baseApi";
+import baseApi from "../features/baseApi";
 
 export const rtkQueryErrorLogger =
   (api: MiddlewareAPI) => (next: any) => (action: any) => {

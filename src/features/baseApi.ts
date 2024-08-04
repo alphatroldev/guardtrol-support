@@ -12,7 +12,16 @@ const baseApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ["Organization", "Beats"],
+  tagTypes: [
+    "Organization",
+    "Beats",
+    "TicketCategories",
+    "Ticket",
+    "TicketResponse",
+    "FaqCategories",
+    "SupportUsers",
+    "Faq",
+  ],
   endpoints: () => ({}),
 });
 

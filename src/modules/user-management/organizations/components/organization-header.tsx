@@ -2,11 +2,11 @@ import { FC } from "react";
 import { KTIcon, toAbsoluteUrl } from "../../../../_metronic/helpers";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { Dropdown1 } from "../../../../_metronic/partials";
-import { useGetPatrolsQuery } from "../../../../services/patrol";
-import { useGetPointsQuery } from "../../../../services/point";
-import { useGetGuardsQuery } from "../../../../services/guard";
-import { useGetBeatsQuery } from "../../../../services/beat";
-import { useGetOrganizationByIdQuery } from "../../../../services/organization";
+import { useGetPatrolsQuery } from "../../../../features/patrol";
+import { useGetPointsQuery } from "../../../../features/point";
+import { useGetGuardsQuery } from "../../../../features/guard";
+import { useGetBeatsQuery } from "../../../../features/beat";
+import { useGetOrganizationByIdQuery } from "../../../../features/organization";
 import {
   API_BASE_URL,
   ASSETS_URL,

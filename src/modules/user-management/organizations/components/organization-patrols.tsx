@@ -3,9 +3,9 @@ import { KTIcon, toAbsoluteUrl } from "../../../../_metronic/helpers";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { Dropdown1 } from "../../../../_metronic/partials";
 import AllBeats from "../../../users/beats/all";
-import { useGetBeatsQuery } from "../../../../services/beat";
+import { useGetBeatsQuery } from "../../../../features/beat";
 import ReusableTable from "../../../../components/ReusableTable";
-import { useGetPatrolsQuery } from "../../../../services/patrol";
+import { useGetPatrolsQuery } from "../../../../features/patrol";
 
 const OrganizationPatrols: FC = () => {
   const [showCreateBeatModal, setShowCreateBeatModal] =

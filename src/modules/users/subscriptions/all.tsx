@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import { CreateSubscription } from "./create-subscriptions";
-import { useGetSubscriptionsQuery } from "../../../services/subscription";
+import { useGetSubscriptionsQuery } from "../../../features/subscription";
 import { ToolbarWrapper } from "../../../_metronic/layout/components/toolbar";
 import { Content } from "../../../_metronic/layout/components/content";
 import { PageTitle } from "../../../_metronic/layout/core";

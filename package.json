@@ -51,6 +51,8 @@
     "redux-logger": "^3.0.6",
     "redux-persist": "^6.0.0",
     "socicon": "3.0.5",
+    "socket.io-client": "^4.7.5",
+    "sweetalert2-react-content": "^5.0.7",
     "yup": "^1.0.0"
   },
   "devDependencies": {

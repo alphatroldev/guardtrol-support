@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 
 import CreateBeatForm from "./create-guard";
-import { useGetOrganizationsQuery } from "../../../services/organization";
+import { useGetOrganizationsQuery } from "../../../features/organization";
 import { ToolbarWrapper } from "../../../_metronic/layout/components/toolbar";
 import { Content } from "../../../_metronic/layout/components/content";
 import { PageTitle } from "../../../_metronic/layout/core";
 import ReusableTable from "../../../components/ReusableTable";
-import { useGetGuardsQuery } from "../../../services/guard";
+import { useGetGuardsQuery } from "../../../features/guard";
 
 const AllGuards: React.FC = () => {
   const [showCreateGuardModal, setShowCreateGuardModal] =

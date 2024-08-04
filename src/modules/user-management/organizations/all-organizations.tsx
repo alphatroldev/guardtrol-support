@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
 import { CreateOrganization } from "./create-organization";
-import { useGetOrganizationsQuery } from "../../../services/organization";
 import { ToolbarWrapper } from "../../../_metronic/layout/components/toolbar";
 import { Content } from "../../../_metronic/layout/components/content";
 import { PageTitle } from "../../../_metronic/layout/core";
@@ -11,6 +10,7 @@ import { usersManagementBreadCrumbs } from "../../../breadcrumbs/usersManagement
 import { IOrganization } from "../../../types/organization";
 import { ISubscription } from "../../../types/subscription";
 import { useDebouncedValue } from "../../../utils/helpers";
+import { useGetOrganizationsQuery } from "../../../features/organization";
 
 const AllOrganizations: React.FC = () => {
   const [showCreateOrganizationModal, setShowCreateOrganizationModal] =

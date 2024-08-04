@@ -4,11 +4,11 @@ import { PageTitle } from "../../_metronic/layout/core";
 import { ToolbarWrapper } from "../../_metronic/layout/components/toolbar";
 import { Content } from "../../_metronic/layout/components/content";
 import { StatisticsWidget5 } from "../../_metronic/partials/widgets";
-import { useGetOrganizationsQuery } from "../../services/organization";
-import { useGetGuardsQuery } from "../../services/guard";
-import { useGetPatrolsQuery } from "../../services/patrol";
-import { useGetSubscriptionsQuery } from "../../services/subscription";
-import { useGetBeatByIdQuery, useGetBeatsQuery } from "../../services/beat";
+import { useGetOrganizationsQuery } from "../../features/organization";
+import { useGetGuardsQuery } from "../../features/guard";
+import { useGetPatrolsQuery } from "../../features/patrol";
+import { useGetSubscriptionsQuery } from "../../features/subscription";
+import { useGetBeatByIdQuery, useGetBeatsQuery } from "../../features/beat";
 
 const AdminDashboardPage: FC = () => {
   const [page, setPage] = useState<number>(1);

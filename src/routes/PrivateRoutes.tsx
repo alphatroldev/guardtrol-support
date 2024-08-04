@@ -9,6 +9,7 @@ import TopBarProgress from "react-topbar-progress-indicator";
 import UsersManagementRouter from "../modules/user-management/user-management-router";
 import SubscriptionsLayout from "../modules/subscriptions/subscriptions-layout";
 import SubscriptionsRouter from "../modules/subscriptions/subscriptions-router";
+import HelpCenter from "../modules/help-center";
 
 const PrivateRoutes = () => {
   return (
@@ -24,7 +25,7 @@ const PrivateRoutes = () => {
           path="subscription-management/*"
           element={<SubscriptionsRouter />}
         />
-
+        <Route path="help-center" element={<HelpCenter />} />
         {/* Page Not Found */}
         <Route path="*" element={<Navigate to="/error/404" />} />
       </Route>

@@ -2,8 +2,8 @@ import React, { useEffect } from "react";
 import * as Yup from "yup";
 import ReusableForm from "../../../../components/form/ReusableFormModal";
 import { useParams } from "react-router-dom";
-import { useGetOrganizationByIdQuery } from "../../../../services/organization";
-import { useCreateBeatMutation } from "../../../../services/beat";
+import { useGetOrganizationByIdQuery } from "../../../../features/organization";
+import { useCreateBeatMutation } from "../../../../features/beat";
 import { toast } from "react-toastify";
 
 const beatAttributes = [

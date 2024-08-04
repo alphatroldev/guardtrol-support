@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { useGetOrganizationByIdQuery } from "../../../../services/organization";
+import { useGetOrganizationByIdQuery } from "../../../../features/organization";
 import { formatDateTime } from "../../../../utils/dateUtils";
 
 type Props = {};

@@ -3,7 +3,7 @@ import { KTIcon, toAbsoluteUrl } from "../../../../_metronic/helpers";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { Dropdown1 } from "../../../../_metronic/partials";
 import AllSubscriptions from "../../../users/beats/all";
-import { useGetSubscriptionsQuery } from "../../../../services/subscription";
+import { useGetSubscriptionsQuery } from "../../../../features/subscription";
 import ReusableTable from "../../../../components/ReusableTable";
 
 import { ISubscription } from "../../../../types/subscription";
@@ -49,6 +49,7 @@ const OrganizationSubscriptions: FC = () => {
       expiresat: item.expiresat ? formatDateTime(item.expiresat) : "",
     }));
   };
+
   return (
     <>
       <ReusableTable

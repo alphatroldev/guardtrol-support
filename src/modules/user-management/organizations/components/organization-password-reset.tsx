@@ -2,12 +2,12 @@ import { FC, useEffect, useState } from "react";
 import { KTIcon, toAbsoluteUrl } from "../../../../_metronic/helpers";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { Dropdown1 } from "../../../../_metronic/partials";
-import { CreateOrganization } from "../create-organization";
+import { CreateOrganization } from "../../support/create-support-user";
 import {
   useGetOrganizationByIdQuery,
   useResetOrganizationPasswordMutation,
   useUpdateOrganizationMutation,
-} from "../../../../services/organization";
+} from "../../../../features/organization";
 import ReusableFormModal from "../../../../components/form/ReusableFormModal";
 import * as Yup from "yup";
 import ReusableForm from "../../../../components/form/ReusableForm";

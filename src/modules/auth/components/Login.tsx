@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import { getUserByToken, login } from "../core/_requests";
 import { toAbsoluteUrl } from "../../../_metronic/helpers";
-import { useLoginMutation } from "../../../services/auth";
+import { useLoginMutation } from "../../../features/auth";
 
 import { useAppDispatch } from "../../../hooks/useAppDispatch";
 import { clearAuth, setUser } from "../../../redux/slice/authSlice";
@@ -52,7 +52,6 @@ export function Login() {
         });
 
         dispatch(setUser(user.data));
-        console.log(user?.data);
       } catch (error: any) {
         console.log(error);
         setStatus(error?.response?.data?.error);

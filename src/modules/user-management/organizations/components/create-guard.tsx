@@ -4,8 +4,8 @@ import ReusableForm from "../../../../components/form/ReusableFormModal";
 import { Modal } from "react-bootstrap";
 import { KTIcon } from "../../../../_metronic/helpers";
 import { useParams } from "react-router-dom";
-import { useGetOrganizationByIdQuery } from "../../../../services/organization";
-import { useCreateGuardMutation } from "../../../../services/guard";
+import { useGetOrganizationByIdQuery } from "../../../../features/organization";
+import { useCreateGuardMutation } from "../../../../features/guard";
 import { toast } from "react-toastify";
 
 const guardAttributes = [

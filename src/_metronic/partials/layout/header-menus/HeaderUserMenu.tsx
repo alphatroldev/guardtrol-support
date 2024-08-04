@@ -4,7 +4,7 @@ import { Languages } from "./Languages";
 import { toAbsoluteUrl } from "../../../helpers";
 import { persistor } from "../../../../redux/store";
 import { useAppDispatch } from "../../../../hooks/useAppDispatch";
-import baseApi from "../../../../services/baseApi";
+import baseApi from "../../../../features/baseApi";
 import { clearAuth, selectUser } from "../../../../redux/slice/authSlice";
 import { useSelector } from "react-redux";
 

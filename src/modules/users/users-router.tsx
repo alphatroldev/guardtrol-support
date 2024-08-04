@@ -2,7 +2,7 @@ import { Route, Routes, Outlet, Navigate } from "react-router-dom";
 import { PageLink, PageTitle } from "../../_metronic/layout/core";
 import { Horizontal } from "../wizards/components/Horizontal";
 import { usersBreadCrumbs } from "../../breadcrumbs/usersBreadCrumbs";
-import AllOrganizations from "../user-management/organizations/all-organizations";
+import AllOrganizations from "../user-management/support/all-support-users";
 import AllGuards from "./guards/all";
 import AllBeats from "./beats/all";
 

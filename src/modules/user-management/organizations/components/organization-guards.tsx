@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 
 import { IGuard } from "../../../../types/guard";
 import { GuardCard } from "../../../../components/cards/guard-card";
-import { useGetGuardsQuery } from "../../../../services/guard";
+import { useGetGuardsQuery } from "../../../../features/guard";
 import { Spinner } from "react-bootstrap";
 import CustomButton from "../../../../components/common/Button";
 import CreateGuardForm from "./create-guard";

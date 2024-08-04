@@ -19,7 +19,7 @@ import persistReducer from "redux-persist/es/persistReducer";
 import persistStore from "redux-persist/es/persistStore";
 import localStorage from "redux-persist/es/storage";
 import { rtkQueryErrorLogger } from "../middleware/rtkQueryErrorLogger";
-import baseApi from "../services/baseApi";
+import baseApi from "../features/baseApi";
 import suspenseMiddleware from "../middleware/suspenseMiddleware";
 
 const reducers = combineReducers({

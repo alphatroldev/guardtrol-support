@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 
-import { useGetOrganizationsQuery } from "../../services/organization";
+import { useGetOrganizationsQuery } from "../../features/organization";
 import { ToolbarWrapper } from "../../_metronic/layout/components/toolbar";
 import { Content } from "../../_metronic/layout/components/content";
 import { PageTitle } from "../../_metronic/layout/core";
 import ReusableTable from "../../components/ReusableTable";
 import { useNavigate } from "react-router-dom";
 import { usersManagementBreadCrumbs } from "../../breadcrumbs/usersManagementBreadCrumbs";
-import { useGetSubscriptionsQuery } from "../../services/subscription";
+import { useGetSubscriptionsQuery } from "../../features/subscription";
 import { ISubscription } from "../../types/subscription";
 import { formatDateTime } from "../../utils/dateUtils";
 import CreateSubscriptionForm from "./create-subscription";

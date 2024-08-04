@@ -35,6 +35,11 @@ const SidebarMenuMain = () => {
           title={intl.formatMessage({ id: "MENU.ORGANIZATIONS" })}
           hasBullet={true}
         />
+        <SidebarMenuItem
+          to="/user-management/support-users"
+          title={intl.formatMessage({ id: "MENU.SUPPORT_USERS" })}
+          hasBullet={true}
+        />
         {/* <SidebarMenuItem
           to="/user-management/roles"
           title={intl.formatMessage({ id: "MENU.ROLE_MANAGEMENT" })}
@@ -85,33 +90,23 @@ const SidebarMenuMain = () => {
         /> */}
       </SidebarMenuItemWithSub>
 
-      {/* <SidebarMenuItemWithSub
-          to="/ticketing-system"
-          title={intl.formatMessage({ id: "MENU.TICKETING_SYSTEM" })}
-          fontIcon="bi-ticket"
-          icon="cheque"
-        >
-          <SidebarMenuItem
-            to="/ticketing-system/create"
-            title={intl.formatMessage({ id: "MENU.TICKET_CREATION" })}
-            hasBullet={true}
-          />
-          <SidebarMenuItem
-            to="/ticketing-system/assignment"
-            title={intl.formatMessage({ id: "MENU.TICKET_ASSIGNMENT" })}
-            hasBullet={true}
-          />
-          <SidebarMenuItem
-            to="/ticketing-system/status-tracking"
-            title={intl.formatMessage({ id: "MENU.TICKET_STATUS_TRACKING" })}
-            hasBullet={true}
-          />
-          <SidebarMenuItem
-            to="/ticketing-system/response-management"
-            title={intl.formatMessage({ id: "MENU.RESPONSE_MANAGEMENT" })}
-            hasBullet={true}
-          />
-        </SidebarMenuItemWithSub> */}
+      <SidebarMenuItem
+        to="/help-center"
+        title={"Help center"}
+        fontIcon="bi-ticket"
+        icon="cheque"
+      />
+
+      {/* <SidebarMenuItem
+          to="/ticketing-system/status-tracking"
+          title={intl.formatMessage({ id: "MENU.TICKET_STATUS_TRACKING" })}
+          hasBullet={true}
+        />
+        <SidebarMenuItem
+          to="/ticketing-system/response-management"
+          title={intl.formatMessage({ id: "MENU.RESPONSE_MANAGEMENT" })}
+          hasBullet={true}
+        /> */}
       {/* 
       <SidebarMenuItemWithSub
         to="/analytics-reporting"
