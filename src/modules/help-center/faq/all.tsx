@@ -11,6 +11,7 @@ import * as swal from "sweetalert2";
 import { IFaqCategories } from "../../../types/faq-categories";
 import { useDeleteFaqMutation, useGetFaqsQuery } from "../../../features/faq";
 import { useGetFaqCategoriesQuery } from "../../../features/faq-categories";
+
 type Props = {
   setFAQ: Function;
   isOpenFaqForm: boolean;
