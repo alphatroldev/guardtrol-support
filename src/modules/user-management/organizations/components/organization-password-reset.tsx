@@ -2,7 +2,6 @@ import { FC, useEffect, useState } from "react";
 import { KTIcon, toAbsoluteUrl } from "../../../../_metronic/helpers";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { Dropdown1 } from "../../../../_metronic/partials";
-import { CreateOrganization } from "../../support/create-support-user";
 import {
   useGetOrganizationByIdQuery,
   useResetOrganizationPasswordMutation,
