@@ -45,7 +45,7 @@ export function HeaderWrapper() {
                     <img
                       alt="Logo"
                       src={toAbsoluteUrl("media/logos/guardtrol-icon-logo.svg")}
-                      className="h-40px"
+                      className="h-30px ps-2"
                     />
                   </Link>
                 </div>
