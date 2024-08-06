@@ -10,6 +10,7 @@ import {
 } from "../../../features/ticket-categories";
 import { useGetTicketsQuery } from "../../../features/tickets";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const initialValues = {
   title: "",
@@ -22,16 +23,14 @@ const CreateTicketCategory = ({
   setCreateTicketCategory,
   refresh,
   ticketCategory,
-  handleClose,
 }: any) => {
   const [IsLoading, setIsLoading] = useState<boolean>(false);
-
+  const navigate = useNavigate();
   const { data: fasApiResponse, refetch: refetchFaqs } = useGetTicketsQuery({});
   const { data: fasApiCategoriesResponse, refetch: refetchFaqCategories } =
     useGetTicketCategoriessQuery({});
   const [createTicketCategory] = useCreateTicketCategoriesMutation();
   const [updateTicketCategory] = useUpdateTicketCategoriesMutation();
-
   const formik = useFormik({
     initialValues: ticketCategory?._id
       ? { title: ticketCategory?.title }
@@ -71,7 +70,7 @@ const CreateTicketCategory = ({
           return setStatus(error.error);
         }
       } finally {
-        handleClose();
+        navigate("/help-center/tickets");
       }
     },
   });
@@ -98,7 +97,7 @@ const CreateTicketCategory = ({
                 className="btn btn-icon btn-sm btn-active-icon-primary"
                 data-kt-users-modal-action="close"
                 style={{ cursor: "pointer" }}
-                onClick={() => handleClose()}
+                onClick={() => navigate("/help-center/tickets")}
               >
                 <KTIcon iconName="cross" className="fs-1" />
               </div>
@@ -146,7 +145,7 @@ const CreateTicketCategory = ({
                     type="reset"
                     data-kt-contacts-type="cancel"
                     className="btn btn-light me-3"
-                    onClick={() => handleClose()}
+                    onClick={() => navigate("/help-center/tickets")}
                   >
                     Cancel
                   </button>

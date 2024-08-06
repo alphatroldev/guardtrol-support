@@ -9,6 +9,7 @@ import {
   useUpdateFaqCategoriesMutation,
 } from "../../../features/faq-categories";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const initialValues = {
   title: "",
@@ -20,12 +21,13 @@ const createFaqCategorySchema = Yup.object().shape({
 const CreateFaqCategory = ({
   setCreateFaqCategory,
   refresh,
-  setClose,
+
   category,
 }: any) => {
   const [IsLoading, setIsLoading] = useState<boolean>(false);
   const [createFaq] = useCreateFaqCategoriesMutation();
   const [updateFaq] = useUpdateFaqCategoriesMutation();
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: category?._id ? { title: category?.title } : initialValues,
@@ -43,7 +45,7 @@ const CreateFaqCategory = ({
           await createFaq(values);
           toast("Faq Category Created");
         }
-        setClose();
+        navigate("/help-center/faq");
         if (1) {
           setCreateFaqCategory(false);
           formik.values = initialValues;
@@ -87,7 +89,7 @@ const CreateFaqCategory = ({
                 className="btn btn-icon btn-sm btn-active-icon-primary"
                 data-kt-users-modal-action="close"
                 style={{ cursor: "pointer" }}
-                onClick={() => setClose()}
+                onClick={() => navigate("/help-center/faq")}
               >
                 <KTIcon iconName="cross" className="fs-1" />
               </div>
@@ -135,7 +137,7 @@ const CreateFaqCategory = ({
                     type="reset"
                     data-kt-contacts-type="cancel"
                     className="btn btn-light me-3"
-                    onClick={() => setClose()}
+                    onClick={() => navigate("/help-center/faq")}
                   >
                     Cancel
                   </button>

@@ -8,6 +8,7 @@ import {
   useUpdateTicketMutation,
 } from "../../../features/tickets";
 import { useGetTicketCategoriessQuery } from "../../../features/ticket-categories";
+import { useNavigate, useParams } from "react-router-dom";
 
 type Props = {
   setCreateTicket: Function;
@@ -26,14 +27,15 @@ const createTicketSchema = Yup.object().shape({
   category: Yup.string().required("Category is required"),
 });
 
-const CreateTicket = ({ setCreateTicket, ticket = null, setIsOpen }: Props) => {
+const CreateTicket = () => {
   const [IsLoading, setIsLoading] = useState<boolean>(false);
-
+  const { ticketId } = useParams();
   const { data: fasApiResponse, refetch: refetchFaqs } = useGetTicketsQuery({});
   const { data: fasApiCategoriesResponse, refetch: refetchFaqCategories } =
     useGetTicketCategoriessQuery({});
   const [createTicket] = useCreateTicketMutation();
   const [updateTicket] = useUpdateTicketMutation();
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues,
@@ -41,9 +43,9 @@ const CreateTicket = ({ setCreateTicket, ticket = null, setIsOpen }: Props) => {
     onSubmit: async (values, { setStatus, setSubmitting }) => {
       setIsLoading(true);
       try {
-        if (ticket?._id) {
+        if (ticketId) {
           await updateTicket({
-            id: ticket?._id,
+            id: ticketId,
             data: {
               subject: values.subject,
               description: values.description,
@@ -61,7 +63,7 @@ const CreateTicket = ({ setCreateTicket, ticket = null, setIsOpen }: Props) => {
           formik.values = initialValues;
           // refresh()
         }
-        setIsOpen(false);
+        navigate("/help-center/tickets");
 
         setSubmitting(false);
         setIsLoading(false);
@@ -96,7 +98,7 @@ const CreateTicket = ({ setCreateTicket, ticket = null, setIsOpen }: Props) => {
           <div className="modal-content rounded">
             <div className="modal-header pb-0 border-0 justify-content-end">
               <div
-                onClick={() => setIsOpen(false)}
+                onClick={() => navigate("/help-center/tickets")}
                 className="btn btn-sm btn-icon btn-active-color-primary"
                 data-bs-dismiss="modal"
               >
@@ -200,7 +202,7 @@ const CreateTicket = ({ setCreateTicket, ticket = null, setIsOpen }: Props) => {
 
                 <div className="text-center">
                   <button
-                    onClick={() => setIsOpen(false)}
+                    onClick={() => navigate("/help-center/tickets")}
                     type="reset"
                     id="kt_modal_new_ticket_cancel"
                     className="btn btn-light me-3"
@@ -222,7 +224,7 @@ const CreateTicket = ({ setCreateTicket, ticket = null, setIsOpen }: Props) => {
                     </i>
                     {!IsLoading && (
                       <span className="indicator-label">
-                        {ticket?._id ? "Update" : "Create"}
+                        {ticketId ? "Update" : "Create"}
                       </span>
                     )}
                     {IsLoading && (
@@ -243,7 +245,7 @@ const CreateTicket = ({ setCreateTicket, ticket = null, setIsOpen }: Props) => {
       </div>
       <div
         className="modal-backdrop fade show"
-        onClick={() => setCreateTicket(false)}
+        onClick={() => navigate("/help-center/tickets")}
       ></div>
     </>
   );

@@ -1,40 +1,16 @@
 import React, { useState } from "react";
 import { PageLink, PageTitle } from "../../_metronic/layout/core";
-import HelpCenterOverview from "./overveiw";
-import HelpCenterFAQ from "./faq/all";
-import HelpCenterTickets from "./tickets";
-import CreateTicket from "./tickets/createTicket";
-import { RootState } from "../../redux/store";
-import { useSelector } from "react-redux";
-
-import Ticket from "./tickets/ticket";
-import CreateTicketCategory from "./tickets/createTicketCategory";
-import CreateFaqCategory from "./faq/createFaqCategory";
-import { IFaq } from "../../types/faq";
-import { ITicket } from "../../types/ticket";
-import { IFaqCategories } from "../../types/faq-categories";
 import { Content } from "../../_metronic/layout/components/content";
 import { ToolbarWrapper } from "../../_metronic/layout/components/toolbar";
-import CreateFaq from "./faq/createFaq";
-import { useGetFaqCategoriesQuery } from "../../features/faq-categories";
-import { useGetFaqsQuery } from "../../features/faq";
-import CustomButton from "../../components/common/Button";
+import { useLocation, Link, Outlet, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 const HelpCenter = () => {
-  const [selectedFaq, setFAQ] = useState<IFaq | null>();
-  const [selectedCategory, setCelectedCategory] = useState<IFaq | null>();
-  const [TICKET, setTICKET] = useState<ITicket>();
-  const [isOpenCreateFaqCategory, setIsOpenCreateFaqCategory] =
-    useState<boolean>();
-  const handleViewTicket = (ticket: ITicket) => {
-    setPage("ticket");
-    setTICKET(ticket);
-  };
-
+  const location = useLocation();
+  const navigate = useNavigate();
   const currentUser = useSelector((state: RootState) => state.auth.user);
-  const [page, setPage] = useState<"overview" | "faq" | "tickets" | "ticket">(
-    "overview"
-  );
+
   const faqBreadcrumbs: Array<PageLink> = [
     {
       title: "Home",
@@ -49,55 +25,7 @@ const HelpCenter = () => {
       isActive: false,
     },
   ];
-  const [createTicket, setCreateTicket] = useState<IFaq>();
-  const [isOpencreateTicket, setIsOpenCreateTicket] = useState<boolean>(false);
-  const [isOpenFaq, setIsOpenFaq] = useState<boolean>(false);
-  const { data: faqsApiCategoriesResponse, refetch: refetchFaqCategories } =
-    useGetFaqCategoriesQuery({});
 
-  const [createCatTicket, setCreateTicketCategory] = useState<ITicket | null>();
-
-  const { data: faqsApiResponse, refetch: refetchFaqs } = useGetFaqsQuery({});
-  const [isOpenCreateTicketCategory, setIsOpenCreateTicketCategory] =
-    useState<boolean>();
-
-  const [createCatFaq, setCreateFaqCategory] =
-    useState<IFaqCategories | null>();
-
-  const handleOpenCreateFaq = () => {
-    setIsOpenFaq(true);
-    setFAQ(null);
-  };
-
-  const handleOpenCreateFaqCat = (type: "open" | "close") => {
-    if (type === "open") {
-      setIsOpenCreateFaqCategory(true);
-      setCelectedCategory(null);
-    }
-    if (type === "close") {
-      setIsOpenCreateFaqCategory(false);
-      setCelectedCategory(null);
-    }
-  };
-
-  const handleOpenCreateTicketCat = (type: "open" | "close") => {
-    if (type === "open") {
-      setIsOpenCreateTicketCategory(true);
-      setCreateTicketCategory(null);
-    }
-    if (type === "close") {
-      setIsOpenCreateTicketCategory(false);
-      setCreateTicketCategory(null);
-    }
-  };
-  // const handleUpdate = (type: 'ticket' | 'faq', state: 'new' | 'close' | TFaq | TTicket) => {
-  //   if (type === 'ticket') {
-  //     setCreateTicket(state)
-  //   }
-  //   if (type === 'faq') {
-  //     setCreateTicket(state)
-  //   }
-  // }
   return (
     <>
       <PageTitle breadcrumbs={faqBreadcrumbs}>Help Center</PageTitle>
@@ -108,154 +36,81 @@ const HelpCenter = () => {
             <div className="card-rounded bg-light d-flex flex-stack flex-wrap p-5">
               <ul className="nav flex-wrap border-transparent fw-bold">
                 <li className="nav-item my-1">
-                  <button
-                    type="button"
-                    onClick={() => setPage("overview")}
+                  <Link
+                    to="/help-center/overview"
                     className={`btn btn-color-gray-600 btn-active-secondary btn-active-color-primary fw-bolder fs-8 fs-lg-base nav-link px-3 px-lg-8 mx-1 text-uppercase ${
-                      page === "overview" && "active"
+                      location.pathname === "/help-center/overview" && "active"
                     }`}
                   >
                     Overview
-                  </button>
+                  </Link>
                 </li>
                 <li className="nav-item my-1">
-                  <button
-                    type="button"
-                    onClick={() => setPage("tickets")}
-                    className={`btn btn-color-gray-600 btn-active-secondary btn-active-color-primary fw-bolder fs-8 fs-lg-base nav-link px-3 px-lg-8 mx-1 text-uppercase  ${
-                      page === "tickets" && "active"
+                  <Link
+                    to="/help-center/tickets"
+                    className={`btn btn-color-gray-600 btn-active-secondary btn-active-color-primary fw-bolder fs-8 fs-lg-base nav-link px-3 px-lg-8 mx-1 text-uppercase ${
+                      location.pathname === "/help-center/tickets" && "active"
                     }`}
                   >
                     Tickets
-                  </button>
+                  </Link>
                 </li>
                 <li className="nav-item my-1">
-                  <button
-                    type="button"
-                    onClick={() => setPage("faq")}
-                    className={`btn btn-color-gray-600 btn-active-secondary btn-active-color-primary fw-bolder fs-8 fs-lg-base nav-link px-3 px-lg-8 mx-1 text-uppercase  ${
-                      page === "faq" && "active"
+                  <Link
+                    to="/help-center/faq"
+                    className={`btn btn-color-gray-600 btn-active-secondary btn-active-color-primary fw-bolder fs-8 fs-lg-base nav-link px-3 px-lg-8 mx-1 text-uppercase ${
+                      location.pathname === "/help-center/faq" && "active"
                     }`}
                   >
                     FAQ
-                  </button>
+                  </Link>
                 </li>
-                {/* <li className='nav-item my-1'>
-                <button
-                  type='button'
-                  onClick={() => setPage('ticket')}
-                  className={`btn btn-color-gray-600 btn-active-secondary btn-active-color-primary fw-bolder fs-8 fs-lg-base nav-link px-3 px-lg-8 mx-1 text-uppercase  ${
-                    page === 'ticket' && 'active'
-                  }`}
-                >
-                  Ticket
-                </button>
-              </li> */}
               </ul>
               <div className="d-flex gap-3">
-                {page === "tickets" && (
+                {location.pathname === "/help-center/tickets" && (
                   <>
-                    {/* <button
-                      className="btn btn-primary fw-bold fs-8 fs-lg-base"
-                      onClick={() => setIsOpenCreateTicket(true)}
-                    >
-                      Create Tickets
-                    </button> */}
-
                     {currentUser?.role === "superadmin" && (
-                      <button
+                      <Link
                         className="btn btn-primary fw-bold fs-8 fs-lg-base"
-                        onClick={() => setIsOpenCreateTicketCategory(true)}
+                        to="/help-center/create-ticket-category"
                       >
                         Create Tickets Category
-                      </button>
+                      </Link>
                     )}
                   </>
                 )}
-                {currentUser?.role === "superadmin" && page === "faq" && (
-                  <>
-                    <button
-                      type="button"
-                      onClick={() => handleOpenCreateFaq()}
-                      className="btn btn-primary mr-5 fw-bold fs-8 fs-lg-base"
-                    >
-                      <i className="ki-duotone ki-badge fs-2  mx-2">
-                        <span className="path1"></span>
-                        <span className="path2"></span>
-                        <span className="path3"></span>
-                        <span className="path4"></span>
-                        <span className="path5"></span>
-                      </i>
-                      <span className="indicator-label">Create FAQ</span>
-                    </button>
-
-                    {currentUser?.role === "superadmin" && (
+                {currentUser?.role === "superadmin" &&
+                  location.pathname === "/help-center/faq" && (
+                    <>
+                      <button
+                        type="button"
+                        onClick={() => navigate("/help-center/create-faq")}
+                        className="btn btn-primary mr-5 fw-bold fs-8 fs-lg-base"
+                      >
+                        <i className="ki-duotone ki-badge fs-2 mx-2">
+                          <span className="path1"></span>
+                          <span className="path2"></span>
+                          <span className="path3"></span>
+                          <span className="path4"></span>
+                          <span className="path5"></span>
+                        </i>
+                        <span className="indicator-label">Create FAQ</span>
+                      </button>
                       <button
                         className="btn btn-primary fw-bold fs-8 fs-lg-base"
-                        onClick={() => handleOpenCreateFaqCat("open")}
+                        onClick={() =>
+                          navigate("/help-center/create-faq-category")
+                        }
                       >
                         Create Faq Category
                       </button>
-                    )}
-                  </>
-                )}
+                    </>
+                  )}
               </div>
             </div>
           </div>
         </div>
-        {page === "overview" && <HelpCenterOverview setPage={setPage} />}
-        {page === "faq" && (
-          <HelpCenterFAQ
-            isOpenFaqForm={isOpenFaq}
-            setIsOpenFaqForm={setIsOpenFaq}
-            FAQ={selectedFaq}
-            setFAQ={setFAQ}
-          />
-        )}
-        {page === "tickets" && (
-          <HelpCenterTickets handleViewTicket={handleViewTicket} />
-        )}
-        {page === "ticket" && <Ticket ticket={TICKET} setPage={setPage} />}
-
-        {isOpencreateTicket && (
-          <CreateTicket
-            ticket={createTicket}
-            setIsOpen={setIsOpenCreateTicket}
-            setCreateTicket={setCreateTicket}
-          />
-        )}
-
-        {isOpenCreateTicketCategory && (
-          <CreateTicketCategory
-            handleClose={() => handleOpenCreateTicketCat("close")}
-            ticketCategory={createCatTicket}
-            setCreateTicketCategory={setCreateTicketCategory}
-          />
-        )}
-        {isOpenCreateFaqCategory && (
-          <CreateFaqCategory
-            category={createCatFaq}
-            setCreateFaqCategory={setCreateFaqCategory}
-            setClose={() => handleOpenCreateFaqCat("close")}
-          />
-        )}
-
-        {/* {currentUser?.role === "superadmin" && selectedCategory && (
-          <CreateFaqCategory
-            category={selectedCategory}
-            setCategory={setCelectedCategory}
-            refresh={refetchFaqCategories}
-          />
-        )} */}
-        {currentUser?.role === "superadmin" && isOpenFaq && (
-          <CreateFaq
-            faq={selectedFaq}
-            faqCategories={faqsApiCategoriesResponse?.data || []}
-            setFAQ={setFAQ}
-            refresh={refetchFaqs}
-            setIsOpenFaqForm={setIsOpenFaq}
-          />
-        )}
+        <Outlet />
       </Content>
     </>
   );

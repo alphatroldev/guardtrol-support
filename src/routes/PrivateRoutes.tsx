@@ -10,6 +10,15 @@ import UsersManagementRouter from "../modules/user-management/user-management-ro
 import SubscriptionsLayout from "../modules/subscriptions/subscriptions-layout";
 import SubscriptionsRouter from "../modules/subscriptions/subscriptions-router";
 import HelpCenter from "../modules/help-center";
+import HelpCenterOverview from "../modules/help-center/overveiw";
+import HelpCenterFAQ from "../modules/help-center/faq/all";
+import HelpCenterTickets from "../modules/help-center/tickets";
+import Ticket from "../modules/help-center/tickets/ticket";
+import CreateTicket from "../modules/help-center/tickets/createTicket";
+import CreateTicketCategory from "../modules/help-center/tickets/createTicketCategory";
+import CreateFaqCategory from "../modules/help-center/faq/createFaqCategory";
+import CreateFaq from "../modules/help-center/faq/createFaq";
+import RequireSuperAdmin from "./RequireSuperAdmin";
 
 const PrivateRoutes = () => {
   return (
@@ -25,7 +34,25 @@ const PrivateRoutes = () => {
           path="subscription-management/*"
           element={<SubscriptionsRouter />}
         />
-        <Route path="help-center" element={<HelpCenter />} />
+        <Route path="help-center/*" element={<HelpCenter />} />
+        <Route path="/help-center" element={<HelpCenter />}>
+          <Route path="overview" element={<HelpCenterOverview />} />
+          <Route path="faq" element={<HelpCenterFAQ />} />
+          <Route path="tickets" element={<HelpCenterTickets />} />
+          <Route path="ticket/:ticketId" element={<Ticket />} />
+          <Route element={<RequireSuperAdmin />}>
+            <Route path="create-ticket" element={<CreateTicket />} />
+            <Route path="create-faq-category" element={<CreateFaqCategory />} />
+            <Route
+              path="create-ticket-category"
+              element={<CreateTicketCategory />}
+            />
+            <Route path="edit-ticket/:ticketId" element={<CreateTicket />} />
+            <Route path="faq/edit-faq/:faqId" element={<CreateFaq />} />
+
+            <Route path="create-faq" element={<CreateFaq />} />
+          </Route>
+        </Route>
         {/* Page Not Found */}
         <Route path="*" element={<Navigate to="/error/404" />} />
       </Route>

@@ -18,9 +18,12 @@ import {
 import { toast } from "react-toastify";
 import withReactContent from "sweetalert2-react-content";
 import * as swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import socket from "../../../services/sockets";
 import { selectUser } from "../../../redux/slice/authSlice";
+import { selectUnreadTickets } from "../../../redux/selectors/notification";
+import { removeNotification } from "../../../redux/slice/notificationSlice";
+import { useDispatch } from "react-redux";
 
 const MySwal = withReactContent(swal.default);
 
@@ -35,9 +38,11 @@ const ticketResponseSchema = Yup.object().shape({
   status: Yup.string().required("Status is required"),
 });
 
-const Ticket = ({ ticket, setPage }: Props) => {
+const Ticket = () => {
+  const { ticketId } = useParams();
   const [IsLoading, setIsLoading] = useState<boolean>(false);
   const user = useSelector(selectUser);
+  const dispatch = useDispatch();
   const [assignTicket, setAssignTitcket] = useState<
     "new" | "close" | boolean
   >();
@@ -47,15 +52,20 @@ const Ticket = ({ ticket, setPage }: Props) => {
     data: ticketApiResponses,
     refetch: refetchTicketResponses,
     isUninitialized,
-  } = useGetTicketResponsesQuery({ ticket: ticket?._id || "" });
+  } = useGetTicketResponsesQuery({ ticket: ticketId || "" });
+  const unreadTickets = useSelector(selectUnreadTickets);
 
   const {
     data: ticketApiResponse,
     refetch: refetchTicket,
     isUninitialized: isUninitializedFetchTicket,
-  } = useGetTicketByIdQuery(ticket?._id || "");
+  } = useGetTicketByIdQuery(ticketId || "");
 
-  console.log(ticketApiResponse);
+  useEffect(() => {
+    if (ticketId && unreadTickets.includes(ticketId)) {
+      dispatch(removeNotification(ticketId));
+    }
+  }, [unreadTickets]);
   const { refetch: refetchTickets } = useGetTicketsQuery({});
 
   const [deleteTicket] = useDeleteTicketMutation();
@@ -66,9 +76,9 @@ const Ticket = ({ ticket, setPage }: Props) => {
     onSubmit: async (values, { setStatus, setSubmitting }) => {
       setIsLoading(true);
       try {
-        if (!ticket) return;
-        await sendResponse({ ...values, ticket: ticket?._id });
-        ticket.status = values.status;
+        if (!ticketApiResponse) return;
+        await sendResponse({ ...values, ticket: ticketId });
+
         await refetchTicketResponses();
         toast("Your response has been sent");
         await refetchTickets();
@@ -113,7 +123,7 @@ const Ticket = ({ ticket, setPage }: Props) => {
       if (result.isConfirmed) {
         deleteTicket(ticket._id || "").then((res) => {
           if (res?.data) {
-            setPage("tickets");
+            // setPage("tickets");
             toast("Ticket has been deleted");
           }
           // else {
@@ -148,7 +158,9 @@ const Ticket = ({ ticket, setPage }: Props) => {
           <div className="card-toolbar">
             <button
               type="button"
-              onClick={() => ticket && handleDelete(ticket)}
+              onClick={() =>
+                ticketApiResponse && handleDelete(ticketApiResponse)
+              }
               className="btn btn-sm btn-icon btn-color-danger btn-active-light-danger mb-2"
               data-kt-menu-trigger="click"
               data-kt-menu-placement="bottom-end"
@@ -325,7 +337,7 @@ const Ticket = ({ ticket, setPage }: Props) => {
                               className="form-control form-control-solid placeholder-gray-600 fw-bold fs-4 ps-9 pt-7"
                               rows={6}
                               {...formik.getFieldProps("message")}
-                              placeholder="Share Your Knowledge"
+                              placeholder="Send Response"
                             ></textarea>
                             {formik.touched.message &&
                               formik.errors.message && (

@@ -9,6 +9,7 @@ import { useGetGuardsQuery } from "../../features/guard";
 import { useGetPatrolsQuery } from "../../features/patrol";
 import { useGetSubscriptionsQuery } from "../../features/subscription";
 import { useGetBeatByIdQuery, useGetBeatsQuery } from "../../features/beat";
+import { TicketsOverview } from "./TicketsOverview";
 
 const AdminDashboardPage: FC = () => {
   const [page, setPage] = useState<number>(1);
@@ -85,6 +86,11 @@ const AdminDashboardPage: FC = () => {
               title={`${beatsApiResponse?.total || 0}`}
               description="Beats"
             />
+          </div>
+        </div>
+        <div className="row g-5 g-xl-8">
+          <div className="col-6">
+            <TicketsOverview />
           </div>
         </div>
       </Content>

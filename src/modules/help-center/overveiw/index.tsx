@@ -5,15 +5,16 @@ import { IFaq } from "../../../types/faq";
 import { useGetTicketsQuery } from "../../../features/tickets";
 import { useGetFaqsQuery } from "../../../features/faq";
 import { useGetFaqCategoriesQuery } from "../../../features/faq-categories";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   setPage: Function;
 };
 
-const HelpCenterOverview = ({ setPage }: Props) => {
+const HelpCenterOverview = () => {
   const [faqs, setFaqs] = useState<Array<IFaq>>();
   const currentUser = useSelector(selectUser);
-
+  const navigate = useNavigate();
   const isAdmin = currentUser?.role === "superadmin";
   const { data: faqsApiResponse, refetch: refetchFaqs } = useGetFaqsQuery({});
   const { data: ticketsApiResponse, refetch: refetchTickets } =
@@ -21,7 +22,6 @@ const HelpCenterOverview = ({ setPage }: Props) => {
   const { data: fasApiCategoriesResponse, refetch: refetchFaqCategories } =
     useGetFaqCategoriesQuery({});
 
-  console.log(faqsApiResponse);
   return (
     <div className="row gy-0 mb-6 mb-xl-12">
       <div className="col-md-6">
@@ -37,7 +37,7 @@ const HelpCenterOverview = ({ setPage }: Props) => {
                     <span
                       className="text-primary fw-bold me-1 "
                       style={{ cursor: "pointer" }}
-                      onClick={() => setPage("tickets")}
+                      onClick={() => navigate("/help-center/tickets")}
                     >
                       All
                     </span>
@@ -102,7 +102,7 @@ const HelpCenterOverview = ({ setPage }: Props) => {
                 <div className="d-flex align-items-center">
                   <span
                     style={{ cursor: "pointer" }}
-                    onClick={() => setPage("faq")}
+                    onClick={() => navigate("/help-center/faq")}
                     className="text-primary fw-bold me-1"
                   >
                     Full FAQ

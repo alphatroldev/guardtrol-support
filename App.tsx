@@ -13,29 +13,34 @@ import socket from "./src/services/sockets";
 import { useGetTicketsQuery } from "./src/features/tickets";
 import baseApi from "./src/features/baseApi";
 import { useDispatch } from "react-redux";
+import { addNotification } from "./src/redux/slice/notificationSlice";
+import { selectUnreadTickets } from "./src/redux/selectors/notification";
+import { useSelector } from "react-redux";
 
 const App = () => {
   const dispatch = useDispatch();
   const { data: ticketApiResponse, refetch: refetchTicket } =
     useGetTicketsQuery({});
-
+  const unreadTickets = useSelector(selectUnreadTickets);
   useEffect(() => {
     socket.emit("join", "support");
 
-    const handleTicketResponse = (ticketResponse: any) => {
-      console.log("Ticket Response Event:", ticketResponse);
+    const handleTicketResponse = (ticket: any) => {
+      console.log("Ticket Response Event:", ticket);
       toast("New response on client ticket");
       dispatch(
         baseApi.util.invalidateTags([
-          { type: "TicketResponse", id: `LIST-${ticketResponse?._id}` },
+          { type: "TicketResponse", id: `LIST-${ticket?._id}` },
         ])
       );
+      dispatch(addNotification(ticket._id));
     };
 
     const handleNewTicket = (ticket: any) => {
       console.log(ticket);
       toast("A new ticket has been submitted");
       dispatch(baseApi.util.invalidateTags([{ type: "Ticket", id: "LIST" }]));
+      dispatch(addNotification(ticket._id));
     };
 
     socket.on("new-ticket", handleNewTicket);
@@ -46,6 +51,7 @@ const App = () => {
       socket.off(`new-ticket-response`, handleTicketResponse);
     };
   }, []);
+
   return (
     <Suspense fallback={<LayoutSplashScreen />}>
       <I18nProvider>

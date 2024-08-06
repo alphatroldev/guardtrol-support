@@ -21,11 +21,13 @@ import localStorage from "redux-persist/es/storage";
 import { rtkQueryErrorLogger } from "../middleware/rtkQueryErrorLogger";
 import baseApi from "../features/baseApi";
 import suspenseMiddleware from "../middleware/suspenseMiddleware";
+import notificationReducer from "./slice/notificationSlice";
 
 const reducers = combineReducers({
   [baseApi.reducerPath]: baseApi.reducer,
   auth: authReducer,
   suspense: suspenseReducer,
+  notification: notificationReducer,
 });
 
 const persistConfig = {

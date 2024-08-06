@@ -11,19 +11,20 @@ import * as swal from "sweetalert2";
 import { IFaqCategories } from "../../../types/faq-categories";
 import { useDeleteFaqMutation, useGetFaqsQuery } from "../../../features/faq";
 import { useGetFaqCategoriesQuery } from "../../../features/faq-categories";
+import { useNavigate } from "react-router-dom";
 
-type Props = {
-  setFAQ: Function;
-  isOpenFaqForm: boolean;
-  setIsOpenFaqForm: Function;
-  FAQ?: IFaq | null;
-};
+// type Props = {
+//   setFAQ: Function;
+//   isOpenFaqForm: boolean;
+//   setIsOpenFaqForm: Function;
+//   FAQ?: IFaq | null;
+// };
 const MySwal = withReactContent(swal.default);
 
-const HelpCenterFAQ = ({ setFAQ, setIsOpenFaqForm }: Props) => {
+const HelpCenterFAQ = () => {
   const [category, setCategory] = useState<"new" | IFaqCategories>();
   const currentUser = useSelector((state: RootState) => state.auth.user);
-
+  const navigate = useNavigate();
   const [IsLoading, setIsLoading] = useState<boolean>(false);
 
   const [faqCategories, setFaqCategories] = useState<Array<IFaqCategories>>();
@@ -35,7 +36,7 @@ const HelpCenterFAQ = ({ setFAQ, setIsOpenFaqForm }: Props) => {
   const [deleteFaq] = useDeleteFaqMutation();
 
   const handleCloseFaqForm = () => {
-    setIsOpenFaqForm(false);
+    // setIsOpenFaqForm(false);
   };
   const handleDelete = (faq: IFaq) => {
     MySwal.fire({
@@ -111,44 +112,42 @@ const HelpCenterFAQ = ({ setFAQ, setIsOpenFaqForm }: Props) => {
                           <div
                             style={{ position: "relative" }}
                             key={faq._id + "question"}
-                            className="d-flex align-items-center collapsible py-3 toggle mb-0 collapsed"
+                            className="d-flex align-items-center justify-content-between collapsible py-3 toggle mb-0 collapsed"
                             data-bs-toggle="collapse"
                             data-bs-target={`#faq_${faq._id}`}
                             aria-expanded="false"
                           >
-                            <div className="btn btn-sm btn-icon mw-20px btn-active-color-primary me-5">
-                              <i className="ki-duotone ki-minus-square toggle-on text-primary fs-1">
-                                <span className="path1"></span>
-                                <span className="path2"></span>
-                              </i>
-                              <i className="ki-duotone ki-plus-square toggle-off fs-1">
-                                <span className="path1"></span>
-                                <span className="path2"></span>
-                                <span className="path3"></span>
-                              </i>
+                            <div className="d-flex ">
+                              <div className="btn btn-sm btn-icon mw-20px btn-active-color-primary me-5">
+                                <i className="ki-duotone ki-minus-square toggle-on text-primary fs-1">
+                                  <span className="path1"></span>
+                                  <span className="path2"></span>
+                                </i>
+                                <i className="ki-duotone ki-plus-square toggle-off fs-1">
+                                  <span className="path1"></span>
+                                  <span className="path2"></span>
+                                  <span className="path3"></span>
+                                </i>
+                              </div>
+                              <h4 className="text-gray-700 fw-bold cursor-pointer mb-0">
+                                {faq.question}
+                              </h4>
                             </div>
-                            <h4 className="text-gray-700 fw-bold cursor-pointer mb-0">
-                              {faq.question}
-                            </h4>
-                            <div>
+                            <div className="d-flex">
                               {currentUser?.role === "superadmin" && (
                                 <>
                                   <button
                                     type="button"
                                     onClick={() => {
-                                      setIsOpenFaqForm(true);
-                                      setFAQ(faq);
+                                      navigate(`edit-faq/${faq._id}`);
+                                      // setIsOpenFaqForm(true);
+                                      // setFAQ(faq);
                                     }}
                                     className="btn btn-sm btn-icon btn-color-primary btn-active-light-primary mb-2"
                                     data-kt-menu-trigger="click"
                                     data-kt-menu-placement="bottom-end"
                                     data-kt-menu-flip="top-end"
                                     title="Delete"
-                                    style={{
-                                      position: "absolute",
-                                      right: "50px",
-                                      top: "10px",
-                                    }}
                                   >
                                     <KTIcon
                                       iconName="pencil"
@@ -163,11 +162,6 @@ const HelpCenterFAQ = ({ setFAQ, setIsOpenFaqForm }: Props) => {
                                     data-kt-menu-placement="bottom-end"
                                     data-kt-menu-flip="top-end"
                                     title="Delete"
-                                    style={{
-                                      position: "absolute",
-                                      right: "10px",
-                                      top: "10px",
-                                    }}
                                   >
                                     <KTIcon iconName="trash" className="fs-2" />
                                   </button>

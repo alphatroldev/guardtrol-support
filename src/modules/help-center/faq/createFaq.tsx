@@ -6,9 +6,12 @@ import { useEffect, useState } from "react";
 import { IFaqCategories } from "../../../types/faq-categories";
 import {
   useCreateFaqMutation,
+  useGetFaqByIdQuery,
   useUpdateFaqMutation,
 } from "../../../features/faq";
 import { toast } from "react-toastify";
+import { useNavigate, useParams } from "react-router-dom";
+import { useGetTicketCategoriessQuery } from "../../../features/ticket-categories";
 
 type Props = {
   setFAQ: Function;
@@ -29,32 +32,42 @@ const createFaqSchema = Yup.object().shape({
   category: Yup.string().required("Category is required"),
 });
 
-const CreateFaq = ({
-  setFAQ,
-  faqCategories,
-  refresh,
-
-  faq = null,
-  setIsOpenFaqForm,
-}: Props) => {
+const CreateFaq = (
+  {
+    // setFAQ,
+    // faqCategories,
+    // refresh,
+    // faq = null,
+    // setIsOpenFaqForm,
+  }
+) => {
   const [IsLoading, setIsLoading] = useState<boolean>(false);
   const [createFaq] = useCreateFaqMutation();
   const [updateFaq] = useUpdateFaqMutation();
+  const { faqId } = useParams();
+  const navigate = useNavigate();
 
+  const {
+    data: faqApiResponse,
+    refetch: refetchFaq,
+    isUninitialized: isUninitializedFetchFaq,
+  } = useGetFaqByIdQuery(faqId || "", { skip: faqId ? false : true });
+  const { data: fasApiCategoriesResponse, refetch: refetchFaqCategories } =
+    useGetTicketCategoriessQuery({});
   const formik = useFormik({
-    initialValues: faq?._id
+    initialValues: faqId
       ? {
-          category: faq?.category,
-          question: faq?.question,
-          answer: faq?.answer,
+          category: faqApiResponse?.category,
+          question: faqApiResponse?.question,
+          answer: faqApiResponse?.answer,
         }
       : initialValues,
     validationSchema: createFaqSchema,
     onSubmit: async (values, { setStatus, setSubmitting }) => {
       setIsLoading(true);
       try {
-        if (faq?._id) {
-          await updateFaq({ id: faq?._id, data: values });
+        if (faqId) {
+          await updateFaq({ id: faqId, data: values });
           toast("Faq Updated");
         } else {
           await createFaq(values);
@@ -63,9 +76,9 @@ const CreateFaq = ({
 
         if (1) {
           formik.values = initialValues;
-          refresh();
+          // refresh();
         }
-        setFAQ(false);
+        navigate(`/help-center/faq`);
 
         setSubmitting(false);
         setIsLoading(false);
@@ -98,15 +111,14 @@ const CreateFaq = ({
           <div className="modal-content">
             <div className="modal-header pt-7" id="kt_chat_contacts_header">
               <div className="modal-title">
-                <h2> {faq?._id ? "Update Faq" : "Create Faq"}</h2>
+                <h2> {faqId ? "Update Faq" : "Create Faq"}</h2>
               </div>
               <div
                 className="btn btn-icon btn-sm btn-active-icon-primary"
                 data-kt-users-modal-action="close"
                 style={{ cursor: "pointer" }}
                 onClick={() => {
-                  setIsOpenFaqForm(false);
-                  setFAQ(null);
+                  navigate(`/help-center/faq`);
                 }}
               >
                 <KTIcon iconName="cross" className="fs-1" />
@@ -170,12 +182,14 @@ const CreateFaq = ({
                       name="category"
                     >
                       <option value="">Select Category</option>
-                      {faqCategories &&
-                        faqCategories?.map((cat: IFaqCategories) => (
-                          <option key={cat?._id} value={cat?._id}>
-                            {cat.title}
-                          </option>
-                        ))}
+                      {fasApiCategoriesResponse &&
+                        fasApiCategoriesResponse?.data?.map(
+                          (cat: IFaqCategories) => (
+                            <option key={cat?._id} value={cat?._id}>
+                              {cat.title}
+                            </option>
+                          )
+                        )}
                     </select>
                     <div className="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
                   </div>
@@ -216,7 +230,7 @@ const CreateFaq = ({
                     type="reset"
                     data-kt-contacts-type="cancel"
                     className="btn btn-light me-3"
-                    onClick={() => setFAQ(false)}
+                    onClick={() => navigate(`/help-center/faq`)}
                   >
                     Cancel
                   </button>
@@ -235,7 +249,7 @@ const CreateFaq = ({
                     </i>
                     {!IsLoading && (
                       <span className="indicator-label">
-                        {faq?._id ? "Update" : "Create"}
+                        {faqId ? "Update" : "Create"}
                       </span>
                     )}
                     {IsLoading && (

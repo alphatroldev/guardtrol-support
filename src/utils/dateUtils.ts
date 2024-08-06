@@ -5,7 +5,7 @@ const formatDate = (date: any) => {
 };
 
 const formatTime = (date: any) => {
-  return format(new Date(date), "hh:mm:ss a");
+  return format(new Date(date), "hh:mm a");
 };
 
 // Combined Date and Time

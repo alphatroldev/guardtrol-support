@@ -3,9 +3,12 @@ import { useIntl } from "react-intl";
 import { KTIcon } from "../../../../helpers";
 import { SidebarMenuItemWithSub } from "./SidebarMenuItemWithSub";
 import { SidebarMenuItem } from "./SidebarMenuItem";
+import { useSelector } from "react-redux";
+import { selectUnreadTickets } from "../../../../../redux/selectors/notification";
 
 const SidebarMenuMain = () => {
   const intl = useIntl();
+  const unreadTickets = useSelector(selectUnreadTickets);
 
   return (
     <>
@@ -65,7 +68,7 @@ const SidebarMenuMain = () => {
         />
         <SidebarMenuItem
           to="/subscription-management/free-trial"
-          title={"Free trial"}
+          title={"Free Trial"}
           hasBullet={true}
         />
         {/* <SidebarMenuItem
@@ -91,10 +94,11 @@ const SidebarMenuMain = () => {
       </SidebarMenuItemWithSub>
 
       <SidebarMenuItem
-        to="/help-center"
-        title={"Help center"}
+        to="/help-center/overview"
+        title={"Help Center"}
         fontIcon="bi-ticket"
         icon="cheque"
+        description={`${unreadTickets.length || ""}`}
       />
 
       {/* <SidebarMenuItem
