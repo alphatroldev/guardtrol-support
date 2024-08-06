@@ -11,6 +11,7 @@ export interface ITicket {
   assignedTo?: IUser;
   createdAt: string;
   updatedAt: string;
+  ticketNumber: string;
 }
 
 export interface ITicketForm {

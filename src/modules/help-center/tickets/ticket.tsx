@@ -203,6 +203,12 @@ const Ticket = () => {
                     </div>
                     <div className="">
                       <span className="fw-semibold text-muted me-6">
+                        Ticket Number:
+                        <span className="text-hover-primary">
+                          {ticketApiResponse?.ticketNumber}
+                        </span>
+                      </span>
+                      <span className="fw-semibold text-muted me-6">
                         Category:{" "}
                         <a href="#" className="text-muted text-hover-primary">
                           {ticketApiResponse?.category?.title}
@@ -313,9 +319,10 @@ const Ticket = () => {
                                 {...formik.getFieldProps("status")}
                                 className="form-select form-select-solid select2-hidden-accessible"
                               >
-                                <option value="Open" selected>
-                                  Open
+                                <option value="" selected>
+                                  Select Status
                                 </option>
+                                <option value="Open">Open</option>
                                 <option value="Pending">Pending</option>
                                 <option value="Resolved">Resolved</option>
                                 <option value="Closed">Closed</option>

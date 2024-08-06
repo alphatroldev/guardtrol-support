@@ -130,11 +130,14 @@ const HelpCenterTickets = () => {
                           <span className="path2"></span>
                         </i>
                         <div className="d-flex flex-column">
-                          <div className="d-flex align-items-center mb-2">
+                          <div className="d-flex flex-column align-items-start justify-content-center mb-2">
+                            <a className="text-muted text-hover-primary fs-6 me-3 fw-semibold">
+                              {ticket?.ticketNumber}
+                            </a>
+
                             <a className="text-dark text-hover-primary fs-4 me-3 fw-semibold">
                               {ticket.subject}
                             </a>
-                            <span className="badge badge-light-warning my-1"></span>
                           </div>
                           {unreadTickets.includes(ticket._id) ? (
                             <div
