@@ -16,6 +16,7 @@ import { useDispatch } from "react-redux";
 import { addNotification } from "./src/redux/slice/notificationSlice";
 import { selectUnreadTickets } from "./src/redux/selectors/notification";
 import { useSelector } from "react-redux";
+import SocketProvider from "./src/hooks/useSocket";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -52,7 +53,9 @@ const App = () => {
       <I18nProvider>
         <LayoutProvider>
           <ThemeModeProvider>
-            <Outlet />
+            <SocketProvider>
+              <Outlet />
+            </SocketProvider>
             <MasterInit />
           </ThemeModeProvider>
         </LayoutProvider>
