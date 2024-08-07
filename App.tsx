@@ -45,11 +45,6 @@ const App = () => {
 
     socket.on("new-ticket", handleNewTicket);
     socket.on(`new-ticket-response`, handleTicketResponse);
-
-    return () => {
-      socket.off("new-ticket", handleNewTicket);
-      socket.off(`new-ticket-response`, handleTicketResponse);
-    };
   }, []);
 
   return (

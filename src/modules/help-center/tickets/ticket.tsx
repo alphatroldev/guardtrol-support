@@ -78,13 +78,10 @@ const Ticket = () => {
       try {
         if (!ticketApiResponse) return;
         await sendResponse({ ...values, ticket: ticketId });
-
+        formik.resetForm();
         await refetchTicketResponses();
         toast("Your response has been sent");
         await refetchTickets();
-        if (1) {
-          formik.values = initialValues;
-        }
 
         setSubmitting(false);
         setIsLoading(false);
@@ -250,7 +247,84 @@ const Ticket = () => {
                     <div className="mb-10 text-capitalize">
                       {ticketApiResponse?.description}
                     </div>
-
+                    {ticketApiResponse?.status !== "Closed" &&
+                      ticketApiResponse?.status !== "Resolved" && (
+                        <form onSubmit={formik.handleSubmit}>
+                          <div className="row mb-7">
+                            <div
+                              className="col-sm-3 fv-row mb-3"
+                              data-select2-id="select2-data-155-jmvd"
+                            >
+                              <label className="fs-6 fw-semibold mb-2">
+                                Status
+                              </label>
+                              <select
+                                {...formik.getFieldProps("status")}
+                                className="form-select form-select-solid select2-hidden-accessible"
+                              >
+                                <option value="" selected>
+                                  Select Status
+                                </option>
+                                <option value="Open">Open</option>
+                                <option value="Pending">Pending</option>
+                                <option value="Resolved">Resolved</option>
+                                <option value="Closed">Closed</option>
+                              </select>
+                              {formik.touched.status &&
+                                formik.errors.status && (
+                                  <div className="fv-plugins-message-container">
+                                    <div className="fv-help-block">
+                                      <span role="alert">
+                                        {formik.errors.status}
+                                      </span>
+                                    </div>
+                                  </div>
+                                )}
+                            </div>
+                          </div>
+                          <div className="mb-0">
+                            <textarea
+                              className="form-control form-control-solid placeholder-gray-600 fs-4 ps-9 pt-7"
+                              rows={6}
+                              {...formik.getFieldProps("message")}
+                              placeholder="Send Response"
+                            ></textarea>
+                            {formik.touched.message &&
+                              formik.errors.message && (
+                                <div className="fv-plugins-message-container">
+                                  <div className="fv-help-block">
+                                    <span role="alert">
+                                      {formik.errors.message}
+                                    </span>
+                                  </div>
+                                </div>
+                              )}
+                            <div className="d-flex justify-content-end">
+                              <button
+                                type="submit"
+                                id="kt_sign_in_submit"
+                                className="btn btn-primary mt-5"
+                                disabled={
+                                  formik.isSubmitting || !formik.isValid
+                                }
+                              >
+                                {!IsLoading && (
+                                  <span className="indicator-label">Send </span>
+                                )}
+                                {IsLoading && (
+                                  <span
+                                    className="indicator-progress"
+                                    style={{ display: "block" }}
+                                  >
+                                    Please wait...
+                                    <span className="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                  </span>
+                                )}
+                              </button>
+                            </div>
+                          </div>{" "}
+                        </form>
+                      )}
                     <div className="mb-9">
                       <h1 className="text-gray-800 fw-semibold mb-10">
                         Responses
@@ -304,80 +378,6 @@ const Ticket = () => {
                         </div>
                       ))}
                     </div>
-                    {ticketApiResponse?.status !== "Closed" &&
-                      ticketApiResponse?.status !== "Resolved" && (
-                        <form onSubmit={formik.handleSubmit}>
-                          <div className="row mb-7">
-                            <div
-                              className="col-sm-3 fv-row mb-3"
-                              data-select2-id="select2-data-155-jmvd"
-                            >
-                              <label className="fs-6 fw-semibold mb-2">
-                                Status
-                              </label>
-                              <select
-                                {...formik.getFieldProps("status")}
-                                className="form-select form-select-solid select2-hidden-accessible"
-                              >
-                                <option value="" selected>
-                                  Select Status
-                                </option>
-                                <option value="Open">Open</option>
-                                <option value="Pending">Pending</option>
-                                <option value="Resolved">Resolved</option>
-                                <option value="Closed">Closed</option>
-                              </select>
-                              {formik.touched.status &&
-                                formik.errors.status && (
-                                  <div className="fv-plugins-message-container">
-                                    <div className="fv-help-block">
-                                      <span role="alert">
-                                        {formik.errors.status}
-                                      </span>
-                                    </div>
-                                  </div>
-                                )}
-                            </div>
-                          </div>
-                          <div className="mb-0">
-                            <textarea
-                              className="form-control form-control-solid placeholder-gray-600 fw-bold fs-4 ps-9 pt-7"
-                              rows={6}
-                              {...formik.getFieldProps("message")}
-                              placeholder="Send Response"
-                            ></textarea>
-                            {formik.touched.message &&
-                              formik.errors.message && (
-                                <div className="fv-plugins-message-container">
-                                  <div className="fv-help-block">
-                                    <span role="alert">
-                                      {formik.errors.message}
-                                    </span>
-                                  </div>
-                                </div>
-                              )}
-                            <button
-                              type="submit"
-                              id="kt_sign_in_submit"
-                              className="btn btn-primary mt-5"
-                              disabled={formik.isSubmitting || !formik.isValid}
-                            >
-                              {!IsLoading && (
-                                <span className="indicator-label">Send </span>
-                              )}
-                              {IsLoading && (
-                                <span
-                                  className="indicator-progress"
-                                  style={{ display: "block" }}
-                                >
-                                  Please wait...
-                                  <span className="spinner-border spinner-border-sm align-middle ms-2"></span>
-                                </span>
-                              )}
-                            </button>
-                          </div>{" "}
-                        </form>
-                      )}
                   </div>
                 </div>
 
