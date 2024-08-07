@@ -329,54 +329,54 @@ const Ticket = () => {
                       <h1 className="text-gray-800 fw-semibold mb-10">
                         Responses
                       </h1>
-                      {ticketApiResponses?.data?.map((ticketsResponse) => (
-                        <div
-                          key={ticketsResponse?._id}
-                          className="card card-bordered w-100 mb-10"
-                        >
-                          <div className="card-body">
-                            <div className="w-100 d-flex flex-stack mb-8">
-                              <div className="d-flex align-items-center f">
-                                <div className="symbol symbol-50px me-5">
-                                  <div className="symbol-label fs-1 fw-bold bg-light-success text-success">
-                                    {ticketsResponse?.author?.name?.[0]}
+                      {[...(ticketApiResponses?.data || [])]
+                        .sort(
+                          (a, b) =>
+                            new Date(b.createdAt).getTime() -
+                            new Date(a.createdAt).getTime()
+                        )
+                        .map((ticketsResponse) => (
+                          <div
+                            key={ticketsResponse?._id}
+                            className="card card-bordered w-100 mb-10"
+                          >
+                            <div className="card-body">
+                              <div className="w-100 d-flex flex-stack mb-8">
+                                <div className="d-flex align-items-center f">
+                                  <div className="symbol symbol-50px me-5">
+                                    <div className="symbol-label fs-1 fw-bold bg-light-success text-success">
+                                      {ticketsResponse?.author?.name?.[0]}
+                                    </div>
                                   </div>
-                                </div>
-                                <div className="d-flex flex-column fw-semibold fs-5 text-gray-600 text-dark">
-                                  <div className="d-flex align-items-center">
-                                    <a className="text-gray-800 fw-bold text-hover-primary fs-5 me-3">
-                                      {ticketsResponse?.author?.name}
-                                    </a>
-                                    {ticketApiResponse?.author?._id ===
-                                      ticketsResponse?.author?._id && (
-                                      <span className="badge badge-light-danger">
-                                        Author
-                                      </span>
-                                    )}
+                                  <div className="d-flex flex-column fw-semibold fs-5 text-gray-600 text-dark">
+                                    <div className="d-flex align-items-center">
+                                      <a className="text-gray-800 fw-bold text-hover-primary fs-5 me-3">
+                                        {ticketsResponse?.author?.name}
+                                      </a>
+                                      {ticketApiResponse?.author?._id ===
+                                        ticketsResponse?.author?._id && (
+                                        <span className="badge badge-light-danger">
+                                          Author
+                                        </span>
+                                      )}
+                                    </div>
+                                    <span className="text-muted fw-semibold fs-6">
+                                      {formatDistanceToNow(
+                                        new Date(ticketsResponse?.createdAt),
+                                        {
+                                          addSuffix: true,
+                                        }
+                                      )}
+                                    </span>
                                   </div>
-                                  <span className="text-muted fw-semibold fs-6">
-                                    {" "}
-                                    {formatDistanceToNow(
-                                      new Date(ticketsResponse?.createdAt),
-                                      {
-                                        addSuffix: true,
-                                      }
-                                    )}
-                                  </span>
                                 </div>
                               </div>
-                              {/* <div className='m-0'>
-                              <button className='btn btn-color-gray-400 btn-active-color-primary p-0 fw-bold'>
-                                Reply
-                              </button>
-                            </div> */}
+                              <p className="fw-normal fs-5 text-gray-700 m-0">
+                                {ticketsResponse?.message}
+                              </p>
                             </div>
-                            <p className="fw-normal fs-5 text-gray-700 m-0">
-                              {ticketsResponse?.message}
-                            </p>
                           </div>
-                        </div>
-                      ))}
+                        ))}
                     </div>
                   </div>
                 </div>
