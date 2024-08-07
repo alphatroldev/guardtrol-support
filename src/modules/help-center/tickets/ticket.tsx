@@ -200,7 +200,7 @@ const Ticket = () => {
                     </div>
                     <div className="">
                       <span className="fw-semibold text-muted me-6">
-                        Ticket Number:
+                        Ticket Number:{" "}
                         <span className="text-hover-primary">
                           {ticketApiResponse?.ticketNumber}
                         </span>
