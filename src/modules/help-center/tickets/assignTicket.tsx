@@ -80,7 +80,10 @@ const AssignTicket = ({ setAssignTicket, ticket }: any) => {
           <div className="modal-content">
             <div className="modal-header pt-7" id="kt_chat_contacts_header">
               <div className="modal-title">
-                <h2>Assign support request to</h2>
+                <h2>
+                  Assign support request to:{" "}
+                  <span className="text-muted">...</span>
+                </h2>
               </div>
               <div
                 className="btn btn-icon btn-sm btn-active-icon-primary"
