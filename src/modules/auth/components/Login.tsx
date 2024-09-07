@@ -26,8 +26,8 @@ const loginSchema = Yup.object().shape({
 });
 
 const initialValues = {
-  email: "support@guardtrol.com",
-  password: "Password",
+  email: "",
+  password: "",
 };
 
 /*

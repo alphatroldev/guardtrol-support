@@ -17,7 +17,13 @@ const AllOrganizations: React.FC = () => {
     useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(10);
-  const [filterParams, setFilterParams] = useState({ search: "" });
+  const [filterParams, setFilterParams] = useState<any>({
+    search: "",
+    subscriptionstatus: "",
+    status: "",
+    sortBy: "createdAt",
+    sortOrder: -1,
+  });
   const navigate = useNavigate();
 
   const handleViewOrganization = (organizationId: string) => {
@@ -27,42 +33,128 @@ const AllOrganizations: React.FC = () => {
     setFilterParams({ ...filterParams, search: e.target.value });
   };
 
-  const debouncedSearchQuery = useDebouncedValue(filterParams.search);
-  console.log(debouncedSearchQuery);
+  const debouncedFilterParams = useDebouncedValue(filterParams);
+
   const { data, error, isLoading, refetch, isFetching } =
     useGetOrganizationsQuery({
       isOwner: true,
+      ...(debouncedFilterParams?.subscriptionstatus && {
+        subscriptionStatus: debouncedFilterParams.subscriptionstatus,
+      }),
+      ...(debouncedFilterParams?.status && {
+        status: debouncedFilterParams.status,
+      }),
       page,
-      ...(debouncedSearchQuery && { search: debouncedSearchQuery }),
+      ...(debouncedFilterParams.search && {
+        search: debouncedFilterParams.search,
+      }),
+      ...(debouncedFilterParams?.sortBy && {
+        sortBy: debouncedFilterParams.sortBy,
+      }),
+      ...(debouncedFilterParams?.sortOrder && {
+        sortOrder: debouncedFilterParams.sortOrder,
+      }),
       limit,
     });
 
   const columns = [
-    { header: "Name", accessor: "name" },
-    { header: "Email", accessor: "email" },
-    { header: "Subscription status", accessor: "subscriptionStatus" },
+    { header: "Name", accessor: "name", lowerCase: false, sortable: true },
+    { header: "Email", accessor: "email", lowerCase: true, sortable: true },
+    {
+      header: "Subscription Status",
+      accessor: "subscriptionStatus",
+      lowerCase: false,
+    },
   ];
+  const handleSort = (col: any) => {
+    console.log(filterParams.sortOrder);
+    if (filterParams.sortOrder === -1) {
+      setFilterParams({
+        ...filterParams,
+        sortBy: col,
+        sortOrder: 1,
+      });
+    } else if (!filterParams.sortOrder) {
+      setFilterParams({
+        ...filterParams,
+        sortBy: col,
+        sortOrder: -1,
+      });
+    } else {
+      setFilterParams({
+        ...filterParams,
+        sortBy: undefined,
+        sortOrder: undefined,
+      });
+    }
+  };
 
   const formatSubscriptionsData = (data: IOrganization[]) => {
-    return data.map((org: any) => ({
-      ...org,
-      subscriptionStatus: org?.subscriptions?.find((sub: ISubscription) => {
-        console.log(org?.subscriptions);
-        return (
-          new Date(`${sub.startsAt}`) < new Date() &&
-          new Date(`${sub.expiresat}`) > new Date()
-        );
-      }) ? (
-        <span className="badge badge-light-success fw-bolder fs-8 px-2 py-1 ms-2">
-          Active
-        </span>
-      ) : (
-        <span className="badge badge-light-warning fw-bolder fs-8 px-2 py-1 ms-2">
-          Inactive
-        </span>
-      ),
-    }));
+    return data.map((org: any) => {
+      let subscriptionStatus = org?.subscriptions?.find(
+        (sub: ISubscription) => {
+          // if (filterParams.subscriptionstatus === "active") {
+          return (
+            new Date(`${sub.startsAt}`) < new Date() &&
+            new Date(`${sub.expiresat}`) > new Date()
+          );
+          // } else if (filterParams.subscriptionstatus === "inactive") {
+          //   return (
+          //     new Date(`${sub.startsAt}`) < new Date() &&
+          //     new Date(`${sub.expiresat}`) > new Date()
+          //   );
+          // } else {
+          //   return true;
+          // }
+        }
+      );
+      if (subscriptionStatus?.plan === "free plan") {
+        subscriptionStatus = "free trial";
+      } else if (subscriptionStatus && subscriptionStatus?.plan !== "active") {
+        subscriptionStatus = "active";
+      } else if (!subscriptionStatus) {
+        subscriptionStatus = "inactive";
+      }
+      return {
+        ...org,
+        subscriptionStatus:
+          subscriptionStatus === "active" ? (
+            <span className="badge badge-light-success fw-bolder fs-8 px-2 py-1 ms-2">
+              Active
+            </span>
+          ) : subscriptionStatus === "free trial" ? (
+            <span className="badge badge-light-info fw-bolder fs-8 px-2 py-1 ms-2">
+              Demo
+            </span>
+          ) : (
+            <span className="badge badge-light-warning fw-bolder fs-8 px-2 py-1 ms-2">
+              Inactive
+            </span>
+          ),
+      };
+    });
   };
+  const tableFilters = [
+    {
+      name: "Subscription Status",
+      onchange: (value: string) =>
+        setFilterParams({ ...filterParams, subscriptionstatus: value }),
+      filterOptions: [
+        { label: "Active", value: "active" },
+        { label: "Inactive", value: "inactive" },
+        { label: "Demo", value: "demo" },
+      ],
+    },
+    {
+      name: "User Status",
+      onchange: (value: string) =>
+        setFilterParams({ ...filterParams, status: value }),
+      filterOptions: [
+        { label: "Enabled", value: "enabled" },
+        { label: "Disabled", value: "disabled" },
+      ],
+    },
+  ];
   return (
     <>
       <PageTitle breadcrumbs={usersManagementBreadCrumbs}>
@@ -75,12 +167,16 @@ const AllOrganizations: React.FC = () => {
         isFetching={isFetching}
         title={"Organizations"}
         buttonText={"Create"}
+        handleSort={handleSort}
+        sortOrder={filterParams.sortOrder}
+        sortBy={filterParams.sortBy}
         onClick={() => setShowCreateOrganizationModal(true)}
         showButton={true}
         showSearch={true}
         searchAction={handleSearchChange}
         onClickView={(organizationId) => handleViewOrganization(organizationId)}
         hasViewBtn={true}
+        tableFilters={tableFilters}
         total={data?.total}
         error={error || null}
         pagination={{

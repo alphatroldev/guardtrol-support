@@ -7,15 +7,25 @@ import CustomButton from "./common/Button";
 
 interface ReusableTableProps {
   data: any[];
-  columns: { header: string; accessor: string }[];
+  columns: {
+    lowerCase: boolean;
+    header: string;
+    accessor: string;
+    sortable?: boolean;
+    minw?: string;
+  }[];
   isLoading: boolean;
   isFetching: boolean;
   error: any;
   buttonText?: string;
+  sortOrder?: any;
+  sortBy?: any;
   showButton?: boolean;
   hasViewBtn?: boolean;
   hasEditBtn?: boolean;
   showSearch?: boolean;
+  tableFilters?: Filter[];
+  sorts?: any;
   total: any | null;
   title: any | null;
   pagination: {
@@ -28,10 +38,16 @@ interface ReusableTableProps {
     onLimitChange: (limit: number) => void;
   };
   onClick?: () => void;
+  handleSort?: (col: any) => void;
   searchAction?: (e: any) => void;
   onClickView?: (id: any) => void;
   onClickEdit?: () => void;
   refetch: () => void;
+}
+interface Filter {
+  name: string;
+  filterOptions: { label: string; value: string }[];
+  onchange: (value: any) => void;
 }
 
 const ReusableTable: FC<ReusableTableProps> = ({
@@ -40,9 +56,12 @@ const ReusableTable: FC<ReusableTableProps> = ({
   buttonText,
   hasViewBtn,
   title,
+  handleSort,
   isLoading,
   isFetching,
   error,
+  sortBy,
+  sortOrder,
   showButton,
   total,
   hasEditBtn,
@@ -51,6 +70,7 @@ const ReusableTable: FC<ReusableTableProps> = ({
   searchAction,
   onClickView,
   onClickEdit,
+  tableFilters,
   filters,
   refetch,
   onClick,
@@ -90,6 +110,25 @@ const ReusableTable: FC<ReusableTableProps> = ({
           </span>
         </h3>
         <div className="card-toolbar d-flex gap-2">
+          <div className="d-flex gap-2 ">
+            {tableFilters?.map((filter) => (
+              <select
+                className="form-control form-select "
+                style={{
+                  height: "35px",
+                  padding: "0 30px 0 10px",
+                  width: "max-content",
+                }}
+                key={`${filter.name}`}
+                onChange={(e) => filter.onchange(e.target.value)}
+              >
+                <option value="">{`${filter.name}`}</option>
+                {filter.filterOptions.map((option) => (
+                  <option value={`${option.value}`}>{option.label}</option>
+                ))}
+              </select>
+            ))}
+          </div>
           {showSearch && (
             <div className="d-flex align-items-center position-relative me-4">
               <KTIcon
@@ -116,15 +155,21 @@ const ReusableTable: FC<ReusableTableProps> = ({
         </div>
       </div>
       <div className="card-body py-3">
-        <div className="table-responsive">
+        <div className="table-responsive mb-5">
           <>
             <table className="table align-middle gs-0 gy-4">
               <thead>
                 <tr className="fw-bold text-muted bg-light">
                   {columns.map((col, i) => {
-                    console.log(i === columns?.length - 1 && "rounded-end");
                     return (
                       <th
+                        style={{
+                          cursor: "pointer",
+                          ...(col.minw && { minWidth: col.minw }),
+                        }}
+                        onClick={() =>
+                          col.sortable && handleSort && handleSort(col.accessor)
+                        }
                         className={`ps-4  ${i === 0 && "rounded-start"} ${
                           i === columns?.length - 1 &&
                           !hasViewBtn &&
@@ -133,6 +178,28 @@ const ReusableTable: FC<ReusableTableProps> = ({
                         key={col.accessor}
                       >
                         {col.header}
+                        {col.sortable && (
+                          <>
+                            {sortOrder === -1 && sortBy === col.accessor && (
+                              <KTIcon
+                                iconName="arrow-down"
+                                className="fs-3 position-absolute ms-3"
+                              />
+                            )}
+                            {sortOrder === 1 && sortBy === col.accessor && (
+                              <KTIcon
+                                iconName="arrow-up"
+                                className="fs-3 position-absolute ms-3"
+                              />
+                            )}
+                            {sortBy !== col.accessor && col.sortable && (
+                              <KTIcon
+                                iconName="sort"
+                                className="fs-3 position-absolute ms-3"
+                              />
+                            )}
+                          </>
+                        )}
                       </th>
                     );
                   })}
@@ -178,9 +245,11 @@ const ReusableTable: FC<ReusableTableProps> = ({
                       <tr key={rowIndex}>
                         {columns.map((col, i) => (
                           <td
-                            className={`text-gray-900 fw-bold text-hover-primary text-capitalize fs-6 ${
-                              i === 0 && "ml-10"
-                            }`}
+                            className={`text-gray-900 fw-bold text-hover-primary ${
+                              col.lowerCase
+                                ? "text-lowercase"
+                                : "text-capitalize"
+                            } fs-6 ${i === 0 && "ml-10"}`}
                             key={col.accessor}
                           >
                             {row[col.accessor]}
@@ -215,57 +284,53 @@ const ReusableTable: FC<ReusableTableProps> = ({
                 </tbody>
               )}
             </table>
-            <div className="d-flex justify-content-between">
-              <Select
-                className="react-select-styled"
-                classNamePrefix="react-select"
-                options={options}
-                defaultValue={options.find(
-                  (opt) => opt.value === filters.limit
-                )}
-                onChange={(option) => filters.onLimitChange(option!.value)}
-              />
-              <nav aria-label="Page navigation">
-                <ul className="pagination">
-                  <li
-                    onClick={() =>
-                      pagination.onPageChange(pagination.currentPage - 1)
-                    }
-                    className={`page-item ${
-                      pagination.currentPage === 1 ? "disabled" : ""
-                    }`}
-                  >
-                    <button
-                      className="page-link"
-                      disabled={pagination.currentPage === 1}
-                    >
-                      &laquo;
-                    </button>
-                  </li>
-                  {renderPageNumbers()}
-                  <li
-                    onClick={() =>
-                      pagination.onPageChange(pagination.currentPage + 1)
-                    }
-                    className={`page-item ${
-                      pagination.currentPage === pagination.totalPages
-                        ? "disabled"
-                        : ""
-                    }`}
-                  >
-                    <button
-                      className="page-link"
-                      disabled={
-                        pagination.currentPage === pagination.totalPages
-                      }
-                    >
-                      &raquo;
-                    </button>
-                  </li>
-                </ul>
-              </nav>
-            </div>
           </>
+        </div>
+        <div className="d-flex justify-content-between">
+          <Select
+            className="react-select-styled"
+            classNamePrefix="react-select"
+            options={options}
+            defaultValue={options.find((opt) => opt.value === filters.limit)}
+            onChange={(option) => filters.onLimitChange(option!.value)}
+          />
+          <nav aria-label="Page navigation">
+            <ul className="pagination">
+              <li
+                onClick={() =>
+                  pagination.onPageChange(pagination.currentPage - 1)
+                }
+                className={`page-item ${
+                  pagination.currentPage === 1 ? "disabled" : ""
+                }`}
+              >
+                <button
+                  className="page-link"
+                  disabled={pagination.currentPage === 1}
+                >
+                  &laquo;
+                </button>
+              </li>
+              {renderPageNumbers()}
+              <li
+                onClick={() =>
+                  pagination.onPageChange(pagination.currentPage + 1)
+                }
+                className={`page-item ${
+                  pagination.currentPage === pagination.totalPages
+                    ? "disabled"
+                    : ""
+                }`}
+              >
+                <button
+                  className="page-link"
+                  disabled={pagination.currentPage === pagination.totalPages}
+                >
+                  &raquo;
+                </button>
+              </li>
+            </ul>
+          </nav>
         </div>
       </div>
     </div>

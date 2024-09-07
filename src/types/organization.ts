@@ -5,6 +5,7 @@ export interface IOrganization {
   roles: string[];
   isOwner: boolean;
   email: string;
+  status: string;
   address?: string;
   subAccount: boolean;
   emailverified: boolean;

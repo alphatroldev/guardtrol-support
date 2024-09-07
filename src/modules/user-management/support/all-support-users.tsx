@@ -34,9 +34,9 @@ const AllSupportUsers: React.FC = () => {
     });
 
   const columns = [
-    { header: "Name", accessor: "name" },
-    { header: "Email", accessor: "email" },
-    { header: "Role", accessor: "role" },
+    { header: "Name", accessor: "name", lowerCase: false },
+    { header: "Email", accessor: "email", lowerCase: true },
+    { header: "Role", accessor: "role", lowerCase: false },
   ];
 
   const formatSupportUsersData = (data: IUser[]) => {

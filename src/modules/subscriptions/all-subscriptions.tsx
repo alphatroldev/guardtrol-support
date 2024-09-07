@@ -29,25 +29,26 @@ const AllSubscriptions = () => {
   } = useGetSubscriptionsQuery({
     page,
     limit,
+    type: "active",
   });
 
   const columns = [
-    { header: "Organization", accessor: "organization" },
+    { header: "Organization", accessor: "organization", minw: "176px" },
     { header: "Plan", accessor: "plan" },
     { header: "Beats", accessor: "maxbeats" },
     { header: "Guards", accessor: "maxextraguards" },
     { header: "Total", accessor: "totalamount" },
     { header: "Gateway", accessor: "paymentgateway" },
-    { header: "Date Created", accessor: "createdat" },
-    { header: "Start Date", accessor: "startsAt" },
-    { header: "Expiry Date", accessor: "expiresat" },
+    { header: "Date Created", accessor: "createdat", minw: "176px" },
+    { header: "Start Date", accessor: "startsAt", minw: "176px" },
+    { header: "Expiry Date", accessor: "expiresat", minw: "176px" },
   ];
 
   const formatSubscriptionsData = (data: ISubscription[]) => {
     return data.map((item: any) => ({
       ...item,
       createdat: item.createdat ? formatDateTime(item.createdat) : "",
-      organization: item.user.name,
+      organization: item?.user?.name,
       totalamount: formatToNaira(item.totalamount),
       startsAt: item.startsAt ? formatDateTime(item.startsAt) : "",
       expiresat: item.expiresat ? formatDateTime(item.expiresat) : "",

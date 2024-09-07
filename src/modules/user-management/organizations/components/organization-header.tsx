@@ -6,7 +6,10 @@ import { useGetPatrolsQuery } from "../../../../features/patrol";
 import { useGetPointsQuery } from "../../../../features/point";
 import { useGetGuardsQuery } from "../../../../features/guard";
 import { useGetBeatsQuery } from "../../../../features/beat";
-import { useGetOrganizationByIdQuery } from "../../../../features/organization";
+import {
+  useGetOrganizationByIdQuery,
+  useUpdateOrganizationStatusMutation,
+} from "../../../../features/organization";
 import {
   API_BASE_URL,
   ASSETS_URL,
@@ -16,13 +19,19 @@ import CustomButton from "../../../../components/common/Button";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../../redux/slice/authSlice";
 import axios from "axios";
+import * as swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+import { Spinner } from "react-bootstrap";
+
+const MySwal = withReactContent(swal.default);
 
 const OrganizationHeader: FC = () => {
   const location = useLocation();
   const params = useParams();
   const { organizationId } = useParams();
   const user = useSelector(selectUser);
-
+  const [UpdateOrganizationStatus, UpdateOrganizationStatusDetails] =
+    useUpdateOrganizationStatusMutation();
   const { data: patrolApiResponse } = useGetPatrolsQuery({
     organization: organizationId,
   });
@@ -62,6 +71,54 @@ const OrganizationHeader: FC = () => {
     }
   };
 
+  const handleUpdateOrganizationStatus = (newStaus: any) => {
+    MySwal.fire({
+      title: `Are you sure, you want to ${
+        newStaus ? "Enable" : "Disable"
+      } Organization "${organization?.name}"?`,
+      icon: "error",
+      buttonsStyling: false,
+      confirmButtonText: "Yes!",
+      showCancelButton: true,
+      heightAuto: false,
+      customClass: {
+        confirmButton: "btn btn-danger",
+        cancelButton: "btn btn-secondary",
+      },
+    }).then((result: any) => {
+      if (result.isConfirmed) {
+        UpdateOrganizationStatus({
+          id: organizationId || "",
+          data: { status: newStaus ? "enabled" : "disabled" },
+        }).then((res) => {
+          if (res?.data) {
+            // refreshProject()
+            MySwal.fire({
+              title: "Updated",
+              text: `Organization has been ${
+                newStaus ? "Enabled" : "Disabled"
+              }.`,
+              icon: "success",
+              customClass: {
+                confirmButton: "btn btn-success",
+              },
+            });
+          }
+          // else {
+          //   MySwal.fire({
+          //     title: 'Error',
+          //     text: res?.error,
+          //     icon: 'error',
+          //     confirmButtonText: 'Close!',
+          //     customClass: {
+          //       confirmButton: 'btn btn-danger',
+          //     },
+          //   })
+          // }
+        });
+      }
+    });
+  };
   return (
     <>
       <div className="card mb-5 mb-xl-10">
@@ -90,9 +147,14 @@ const OrganizationHeader: FC = () => {
                     >
                       {organization?.name}
                     </a>
-                    <a href="#">
-                      <KTIcon iconName="verify" className="fs-1 text-primary" />
-                    </a>
+                    {organization?.status === "active" && (
+                      <a href="#">
+                        <KTIcon
+                          iconName="verify"
+                          className="fs-1 text-primary"
+                        />
+                      </a>
+                    )}
                   </div>
 
                   <div className="d-flex flex-wrap fw-bold fs-6 mb-4 pe-2">
@@ -114,6 +176,31 @@ const OrganizationHeader: FC = () => {
                 </div>
 
                 <div className="d-flex my-4">
+                  <div className="mt-1 pe-10">
+                    <div className="form-check form-switch form-check-custom form-check-solid">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id={"id"}
+                        disabled={UpdateOrganizationStatusDetails.isLoading}
+                        checked={organization?.status === "enabled"}
+                        onChange={() =>
+                          handleUpdateOrganizationStatus(
+                            !(organization?.status === "enabled")
+                          )
+                        }
+                      />
+                      <label className="form-check-label" htmlFor={"id"}>
+                        {UpdateOrganizationStatusDetails.isLoading ? (
+                          <Spinner size="sm" animation="border" />
+                        ) : organization?.status !== "enabled" ? (
+                          "Enable"
+                        ) : (
+                          "Disable"
+                        )}
+                      </label>
+                    </div>
+                  </div>
                   <div className="me-0">
                     <div className="card-toolbar">
                       <CustomButton

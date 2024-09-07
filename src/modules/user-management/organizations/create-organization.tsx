@@ -2,6 +2,8 @@ import { FC } from "react";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import * as Yup from "yup";
 import ReusableFormModal from "../../../components/form/ReusableFormModal";
+import { useCreateOrganizationMutation } from "../../../features/organization";
+import { toast } from "react-toastify";
 
 const attributes = [
   {
@@ -36,24 +38,24 @@ const attributes = [
     placeholder: "Enter address",
     validation: Yup.string().required("Address is required"),
   },
-  {
-    name: "isOwner",
-    label: "Is Owner",
-    type: "checkbox",
-    validation: Yup.boolean().oneOf([true], "Must be checked to proceed"),
-  },
-  {
-    name: "roles",
-    label: "Roles",
-    type: "select",
-    options: [
-      { value: "admin", label: "Admin" },
-      { value: "user", label: "User" },
-    ],
-    validation: Yup.array()
-      .of(Yup.string().required("Role is required"))
-      .required("At least one role is required"),
-  },
+  // {
+  //   name: "isOwner",
+  //   label: "Is Owner",
+  //   type: "checkbox",
+  //   validation: Yup.boolean().oneOf([true], "Must be checked to proceed"),
+  // },
+  // {
+  //   name: "roles",
+  //   label: "Roles",
+  //   type: "select",
+  //   options: [
+  //     { value: "admin", label: "Admin" },
+  //     { value: "user", label: "User" },
+  //   ],
+  //   validation: Yup.array()
+  //     .of(Yup.string().required("Role is required"))
+  //     .required("At least one role is required"),
+  // },
   {
     name: "phone",
     label: "Phone",
@@ -68,18 +70,18 @@ const attributes = [
     placeholder: "Enter WhatsApp number",
     validation: Yup.string().required("WhatsApp number is required"),
   },
-  {
-    name: "image",
-    label: "Profile Image",
-    type: "file",
-    validation: Yup.mixed().required("Profile image is required"),
-  },
-  {
-    name: "onboardingcomplete",
-    label: "Onboarding Complete",
-    type: "checkbox",
-    validation: Yup.boolean().oneOf([true], "Must be checked to proceed"),
-  },
+  // {
+  //   name: "image",
+  //   label: "Profile Image",
+  //   type: "file",
+  //   validation: Yup.mixed().required("Profile image is required"),
+  // },
+  // {
+  //   name: "onboardingcomplete",
+  //   label: "Onboarding Complete",
+  //   type: "checkbox",
+  //   validation: Yup.boolean().oneOf([true], "Must be checked to proceed"),
+  // },
 ];
 
 const initialValues = {
@@ -104,10 +106,15 @@ const CreateOrganization = ({ show, handleClose }: Props) => {
     initMap();
   }, []);
 
+  const [createOrganization] = useCreateOrganizationMutation();
   const initMap = () => {};
 
-  const handleSubmit = (values: any) => {
-    console.log("Form values:", values);
+  const handleSubmit = async (values: any) => {
+    const res = await createOrganization(values);
+    if (res) {
+      toast("Organization has been created");
+    }
+    // console.log("Form values:", values);
   };
   const handleCancel = (values: any) => {
     console.log("Form values:", values);

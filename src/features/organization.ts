@@ -48,6 +48,19 @@ export const organizationApi = baseApi.injectEndpoints({
         { type: "Organization", id },
       ],
     }),
+    updateOrganizationStatus: builder.mutation<
+      { success: boolean },
+      { id: string; data: { status: string } }
+    >({
+      query: ({ id, data }) => ({
+        url: `organizations/status/${id}`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: (result, error, { id }) => [
+        { type: "Organization", id },
+      ],
+    }),
     resetOrganizationPassword: builder.mutation<
       { success: boolean },
       { id: string; data: Partial<IOrganization> }
@@ -78,4 +91,5 @@ export const {
   useUpdateOrganizationMutation,
   useDeleteOrganizationMutation,
   useResetOrganizationPasswordMutation,
+  useUpdateOrganizationStatusMutation,
 } = organizationApi;
