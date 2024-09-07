@@ -20,9 +20,14 @@ const AllBeats: React.FC = () => {
   });
 
   const columns = [
-    { header: "Name", accessor: "name" },
-    { header: "Email", accessor: "email" },
-    { header: "Address", accessor: "address" },
+    { header: "Name", accessor: "name", lowerCase: false, sortable: false },
+    { header: "Email", accessor: "email", lowerCase: false, sortable: false },
+    {
+      header: "Address",
+      accessor: "address",
+      lowerCase: false,
+      sortable: false,
+    },
   ];
   console.log(data);
   return (

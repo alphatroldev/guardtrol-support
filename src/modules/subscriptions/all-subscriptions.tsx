@@ -33,15 +33,59 @@ const AllSubscriptions = () => {
   });
 
   const columns = [
-    { header: "Organization", accessor: "organization", minw: "176px" },
-    { header: "Plan", accessor: "plan" },
-    { header: "Beats", accessor: "maxbeats" },
-    { header: "Guards", accessor: "maxextraguards" },
-    { header: "Total", accessor: "totalamount" },
-    { header: "Gateway", accessor: "paymentgateway" },
-    { header: "Date Created", accessor: "createdat", minw: "176px" },
-    { header: "Start Date", accessor: "startsAt", minw: "176px" },
-    { header: "Expiry Date", accessor: "expiresat", minw: "176px" },
+    {
+      header: "Organization",
+      accessor: "organization",
+      minw: "176px",
+      lowerCase: false,
+      sortable: false,
+    },
+    { header: "Plan", accessor: "plan", lowerCase: false, sortable: false },
+    {
+      header: "Beats",
+      accessor: "maxbeats",
+      lowerCase: false,
+      sortable: false,
+    },
+    {
+      header: "Guards",
+      accessor: "maxextraguards",
+      lowerCase: false,
+      sortable: false,
+    },
+    {
+      header: "Total",
+      accessor: "totalamount",
+      lowerCase: false,
+      sortable: false,
+    },
+    {
+      header: "Gateway",
+      accessor: "paymentgateway",
+      lowerCase: false,
+      sortable: false,
+    },
+    {
+      header: "Date Created",
+      accessor: "createdat",
+      minw: "176px",
+      lowerCase: false,
+      sortable: false,
+    },
+    {
+      header: "Start Date",
+      accessor: "startsAt",
+      minw: "176px",
+      lowerCase: false,
+      sortable: false,
+    },
+    {
+      header: "Expiry Date",
+      accessor: "expiresat",
+      minw: "176px",
+      lowerCase: false,
+      sortable: false,
+    },
   ];
 
   const formatSubscriptionsData = (data: ISubscription[]) => {

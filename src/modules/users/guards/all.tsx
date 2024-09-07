@@ -20,9 +20,9 @@ const AllGuards: React.FC = () => {
   });
 
   const columns = [
-    { header: "Name", accessor: "name" },
-    { header: "Phone", accessor: "phone" },
-    { header: "Status", accessor: "status" },
+    { header: "Name", accessor: "name", lowerCase: false, sortable: false },
+    { header: "Phone", accessor: "phone", lowerCase: false, sortable: false },
+    { header: "Status", accessor: "status", lowerCase: false, sortable: false },
   ];
   console.log(data);
   return (

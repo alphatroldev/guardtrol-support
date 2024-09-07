@@ -33,13 +33,43 @@ const FreeTrialSubscriptions = () => {
   });
 
   const columns = [
-    { header: "Organization", accessor: "organization" },
-    { header: "Plan", accessor: "plan" },
-    { header: "Beats", accessor: "maxbeats" },
-    { header: "Guards", accessor: "maxextraguards" },
-    { header: "Date Created", accessor: "createdat" },
-    { header: "Start Date", accessor: "startsAt" },
-    { header: "Expiry Date", accessor: "expiresat" },
+    {
+      header: "Organization",
+      accessor: "organization",
+      lowerCase: false,
+      sortable: false,
+    },
+    { header: "Plan", accessor: "plan", lowerCase: false, sortable: false },
+    {
+      header: "Beats",
+      accessor: "maxbeats",
+      lowerCase: false,
+      sortable: false,
+    },
+    {
+      header: "Guards",
+      accessor: "maxextraguards",
+      lowerCase: false,
+      sortable: false,
+    },
+    {
+      header: "Date Created",
+      accessor: "createdat",
+      lowerCase: false,
+      sortable: false,
+    },
+    {
+      header: "Start Date",
+      accessor: "startsAt",
+      lowerCase: false,
+      sortable: false,
+    },
+    {
+      header: "Expiry Date",
+      accessor: "expiresat",
+      lowerCase: false,
+      sortable: false,
+    },
   ];
 
   const formatSubscriptionsData = (data: ISubscription[]) => {

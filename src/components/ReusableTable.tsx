@@ -8,7 +8,7 @@ import CustomButton from "./common/Button";
 interface ReusableTableProps {
   data: any[];
   columns: {
-    lowerCase: boolean;
+    lowerCase?: boolean;
     header: string;
     accessor: string;
     sortable?: boolean;

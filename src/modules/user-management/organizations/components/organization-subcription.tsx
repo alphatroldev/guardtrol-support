@@ -31,14 +31,49 @@ const OrganizationSubscriptions: FC = () => {
   });
 
   const columns = [
-    { header: "Plan", accessor: "plan" },
-    { header: "Beats", accessor: "maxbeats" },
-    { header: "Guards", accessor: "maxextraguards" },
-    { header: "Total", accessor: "totalamount" },
-    { header: "Gateway", accessor: "paymentgateway" },
-    { header: "Date Created", accessor: "createdat" },
-    { header: "Start Date", accessor: "startsAt" },
-    { header: "Expiry Date", accessor: "expiresat" },
+    { header: "Plan", accessor: "plan", lowerCase: false, sortable: false },
+    {
+      header: "Beats",
+      accessor: "maxbeats",
+      lowerCase: false,
+      sortable: false,
+    },
+    {
+      header: "Guards",
+      accessor: "maxextraguards",
+      lowerCase: false,
+      sortable: false,
+    },
+    {
+      header: "Total",
+      accessor: "totalamount",
+      lowerCase: false,
+      sortable: false,
+    },
+    {
+      header: "Gateway",
+      accessor: "paymentgateway",
+      lowerCase: false,
+      sortable: false,
+    },
+    {
+      header: "Date Created",
+      accessor: "createdat",
+      lowerCase: false,
+      sortable: false,
+    },
+    {
+      header: "Start Date",
+      accessor: "startsAt",
+      lowerCase: false,
+      sortable: false,
+    },
+    {
+      header: "Expiry Date",
+      accessor: "expiresat",
+      lowerCase: false,
+      sortable: false,
+    },
   ];
 
   const formatSubscriptionsData = (data: ISubscription[]) => {

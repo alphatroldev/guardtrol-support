@@ -22,9 +22,9 @@ const OrganizationPoints: FC = () => {
     });
 
   const columns = [
-    { header: "Name", accessor: "name" },
-    { header: "Description", accessor: "description" },
-    { header: "Coordinates", accessor: "coordinates" },
+    { header: "Name", accessor: "name" ,lowerCase: false, sortable: false },
+    { header: "Description", accessor: "description",lowerCase: false, sortable: false },
+    { header: "Coordinates", accessor: "coordinates",lowerCase: false, sortable: false },
   ];
   console.log(data);
   return (
