@@ -8,6 +8,7 @@ import { useGetSubscriptionsQuery } from "../../../features/subscription";
 const SubscriptionStats = ({ className }: any) => {
   const { data: ActiveSubscriptionsApiResponse } = useGetSubscriptionsQuery({
     type: "active",
+    paymentstatus: "complete",
   });
   const { data: inActiveSubscriptionsApiResponse } = useGetSubscriptionsQuery({
     type: "inactive",

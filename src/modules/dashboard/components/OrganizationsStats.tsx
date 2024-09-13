@@ -26,7 +26,7 @@ const OrganizationsStats = ({
           </div> */}
 
           <div className="col mr-8">
-            <div className="fs-7 text-muted fw-semibold">Enabled</div>
+            <div className="fs-7 text-muted fw-semibold">Active</div>
 
             <div className="d-flex align-items-center">
               <div className="fs-4 fw-bold">{activeOrganizations}</div>
@@ -34,7 +34,7 @@ const OrganizationsStats = ({
           </div>
 
           <div className="col mr-8">
-            <div className="fs-7 text-muted fw-semibold">Disabled</div>
+            <div className="fs-7 text-muted fw-semibold">Inactive</div>
 
             <div className="fs-4 fw-bold">{inActiveOrganizations}</div>
           </div>
