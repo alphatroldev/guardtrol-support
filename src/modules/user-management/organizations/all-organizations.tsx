@@ -108,7 +108,7 @@ const AllOrganizations: React.FC = () => {
           // }
         }
       );
-      if (subscriptionStatus?.plan === "free plan") {
+      if (subscriptionStatus?.plan === "free trial") {
         subscriptionStatus = "free trial";
       } else if (subscriptionStatus && subscriptionStatus?.plan !== "active") {
         subscriptionStatus = "active";
