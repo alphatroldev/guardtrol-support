@@ -2,7 +2,7 @@ import React from "react";
 import { KTIcon } from "../../_metronic/helpers";
 import { useGetTicketsQuery } from "../../features/tickets";
 import { formatDateTime } from "../../utils/dateUtils";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const statusMap: any = {
   closed: "danger",
   resolved: "success",
@@ -16,6 +16,8 @@ const TicketsOverview = () => {
     error,
     isUninitialized,
   } = useGetTicketsQuery({ limit: 6 });
+
+  const navigate = useNavigate();
   return (
     <div className={`card`}>
       {/* begin::Header */}
@@ -45,12 +47,14 @@ const TicketsOverview = () => {
             <tbody>
               {ticketApiResponse?.total ? (
                 ticketApiResponse?.data?.map((ticket) => (
-                  <tr>
+                  <tr
+                    onClick={() =>
+                      navigate(`/help-center/ticket/${ticket._id}`)
+                    }
+                    style={{ cursor: "pointer" }}
+                  >
                     <td>
-                      <a
-                        href="#"
-                        className="text-gray-900 fw-bold text-hover-primary mb-1 fs-6"
-                      >
+                      <a className="text-gray-900 fw-bold text-hover-primary mb-1 fs-6">
                         {ticket.subject}
                       </a>
                       <span className="text-muted fw-semibold d-block fs-7">

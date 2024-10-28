@@ -23,7 +23,7 @@ const StatisticsWidget5: React.FC<Props> = ({
   descriptionColor,
 }) => {
   return (
-    <a href="#" className={`card bg-${color} hoverable ${className}`}>
+    <div className={`card  hoverable ${className}`}>
       <div className="card-body">
         <KTIcon
           iconName={svgIcon}
@@ -38,7 +38,7 @@ const StatisticsWidget5: React.FC<Props> = ({
           {description}
         </div>
       </div>
-    </a>
+    </div>
   );
 };
 
